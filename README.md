@@ -25,3 +25,12 @@ Poetry install
 ```
 poetry install
 ```
+
+
+Create project
+```
+source .venv/bin/activate
+poetry run python manage.py migrate 
+# Create rest_api app
+python manage.py startapp rest_api
+```
