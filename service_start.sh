@@ -8,3 +8,6 @@ source .venv/bin/activate
 
 # poetry run python manage.py migrate 
 poetry run python manage.py runserver 5001
+
+# Create project
+# python manage.py startapp rest_api
