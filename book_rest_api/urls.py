@@ -6,5 +6,5 @@ from .views import helloAPI
 # ]
 
 urlpatterns = [
-    path("swagger/", helloAPI)
+    path("swagger", helloAPI)
 ]
