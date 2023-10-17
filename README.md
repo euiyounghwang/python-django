@@ -1,6 +1,6 @@
 ### Python-Search Project with Django
 
-Why Django REST Framework?
+__Why Django REST Framework?__
 There are many frameworks for building REST APIs, but we’re gonna use the Django Rest Framework by the following reasons:
 - The Web browsable API is a huge usability win for developers.
 - Authentication policies including packages for OAuth1a and OAuth2.
