@@ -21,4 +21,8 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("rest_api.urls")),  # new
+    # --
+    # Django REST Framework (DRF), 
+    # --
+    path('book_rest_api/', include('book_rest_api.urls'))
 ]
