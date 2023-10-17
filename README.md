@@ -9,6 +9,8 @@ There are many frameworks for building REST APIs, but we’re gonna use the Djan
 - Extensive documentation, and great community support.
 - Used and trusted by internationally recognised companies including Mozilla, Red Hat, Heroku, and Eventbrite.
 
+![Alt text](./screenshots/Django-RESTAPI-Architecture.png)
+
 Guide
 ```
 https://www.django-rest-framework.org/
