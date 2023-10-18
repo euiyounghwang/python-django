@@ -45,6 +45,11 @@ INSTALLED_APPS = [
     "django_prometheus",
     # --
     'rest_framework',
+    # --
+    # Add Swagger
+    'rest_framework_swagger',
+    'drf_yasg',
+    # --
     "rest_api",
     'book_rest_api'		 
 ]

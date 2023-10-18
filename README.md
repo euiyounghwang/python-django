@@ -16,6 +16,9 @@ Guide
 https://www.django-rest-framework.org/
 https://cntechsystems.tistory.com/66
 https://velog.io/@zueon/DRF-%EA%B8%B0%EC%B4%88
+# --
+# Swagger
+https://episyche.com/blog/how-to-create-django-api-documentation-using-swagger
 ```
 
 
@@ -43,8 +46,29 @@ Poetry install
 ```
 poetry install
 poetry add djangorestframework
+# For Swqgger
+poetry add django-rest-swagger
+poetry add drf-yasg
 ```
 
+Add 'rest_framework' to your INSTALLED_APPS setting.
+```
+INSTALLED_APPS = [
+    ...
+    # --
+    # Django Prometheus
+    "django_prometheus",
+    # --
+    'rest_framework',
+    # --
+    # Add Swagger
+    'rest_framework_swagger',
+    'drf_yasg',
+    # --
+    "rest_api",
+    'book_rest_api'		 
+]
+```
 
 Create project
 ```
@@ -61,13 +85,36 @@ Run server
 python manage.py runserver 9999
 ```
 
+Django Admin Page (http://localhost:9999/admin)
+```
+python manage.py migrate
+
+(.venv) ➜  python-django git:(master) ✗ python manage.py createsuperuser
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'admin' isn't unique. You may not be able to reverse all URLs in this namespace
+Username (leave blank to use 'euiyoung.hwang'): admin
+Email address: marieuig@gmail.com
+Password: 
+Password (again): 
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+This password is entirely numeric.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+```
+
 URL
 ```
 # Django
 http://localhost:9999/
 
-# djangorestframework (DRF)
+# djangorestframework (DRF) <- Instead of djangorestframework, build Swagger from config.urls (This above url's not working )
 http://localhost:9999/rest_api/swagger/
+
+# djangorestframework (DRF) &&  rest_framework_swagger, drf_yasg
+http://localhost:9999/docs/
 
 # Prometheus
 https://hodovi.cc/blog/django-monitoring-with-prometheus-and-grafana/
