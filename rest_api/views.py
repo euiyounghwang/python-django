@@ -31,26 +31,33 @@ class RestapiView(APIView):
     
     @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
     def get(self, request):
-        logger.info('request helloAPI')
-        return Response({'message' : 'Get: hello, world!'})
+        try:
+            logger.info('request helloAPI')
+            return Response({'message' : 'Get: hello, world!'})
+        except Exception as e:
+            logger.error(e)
     
     # @swagger_auto_schema(tags=['rest_api'], method='post', request_body=login_schema, responses={200: Schema(type=TYPE_OBJECT)})
-    @swagger_auto_schema(tags=['rest_api'], responses={
-    status.HTTP_200_OK: Schema(
-        type=TYPE_OBJECT,
-        properties={
-        #    'students': Schema(
-        #       type=TYPE_ARRAY
-        #    )
-            "message": "hello, world!"
-        }
-       )
-    })
+    # @swagger_auto_schema(tags=['rest_api'], responses={
+    # status.HTTP_200_OK: Schema(
+    #     type=TYPE_OBJECT,
+    #     properties={
+    #     #    'students': Schema(
+    #     #       type=TYPE_ARRAY
+    #     #    )
+    #         "message": "hello, world!"
+    #     }
+    #    )
+    # })
+    @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
     def post(self, request):
-        tutorial_data = JSONParser().parse(request)
-        # print('request : {}'.format(json.dumps(tutorial_data, indent=2)))
-        logger.info('request : {}'.format(json.dumps(tutorial_data, indent=2)))
-        return JsonResponse({'message' : 'Post: hello, world!'})
+        try:
+            tutorial_data = JSONParser().parse(request)
+            # print('request : {}'.format(json.dumps(tutorial_data, indent=2)))
+            logger.info('request : {}'.format(json.dumps(tutorial_data, indent=2)))
+            return JsonResponse({'message' : 'Post: hello, world!'})
+        except Exception as e:
+            logger.error(e)
 
     '''
     @api_view(['GET', 'POST'])
