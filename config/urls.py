@@ -24,5 +24,6 @@ urlpatterns = [
     # --
     # Django REST Framework (DRF), 
     # --
-    path('book_rest_api/', include('book_rest_api.urls'))
+    path('rest_api/', include('rest_api.urls')),
+#     path("prometheus/", include("django_prometheus.urls"))
 ]

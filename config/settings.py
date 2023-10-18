@@ -25,7 +25,10 @@ SECRET_KEY = "django-insecure-778m)o@xx(zgs51clnwz9$_u(m!(!2ud)k9fxk=6mm5!ctvleq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# --
+# Add ALLOWED_HOSTS for Docker using Promethus
+# --
+ALLOWED_HOSTS = ['127.0.0.1','localhost', 'host.docker.internal']
 
 
 # Application definition
@@ -37,6 +40,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # --
+    # Django Prometheus
+    "django_prometheus",
+    # --
     'rest_framework',
     "rest_api",
     'book_rest_api'		 
@@ -50,6 +57,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # --
+    # Django Prometheus
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware"
+    # --
 ]
 
 ROOT_URLCONF = "config.urls"

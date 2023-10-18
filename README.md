@@ -65,6 +65,11 @@ URL
 ```
 # Django
 http://localhost:9999/
+
 # djangorestframework (DRF)
-http://localhost:9999/book_rest_api/swagger/
+http://localhost:9999/rest_api/swagger/
+
+# Prometheus
+https://hodovi.cc/blog/django-monitoring-with-prometheus-and-grafana/
+http://localhost:9999/rest_api/prometheus/metrics
 ```

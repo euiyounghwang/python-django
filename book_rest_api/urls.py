@@ -1,10 +1,6 @@
-from django.urls import path, include
-from .views import helloAPI
-
-# urlpatterns = [
-#     path("", helloAPI, name="home"),
-# ]
+from django.urls import path
+from .views import home_page_view
 
 urlpatterns = [
-    path("swagger", helloAPI)
+    path("", home_page_view, name="home"),
 ]

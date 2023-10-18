@@ -1,0 +1,53 @@
+version: '3'
+#docker-compose -f ./docker-compose.yml up or docker-compose up
+name: python-django-api
+services:
+  
+  fn-django-search-api:
+    image: fn-django-search-api:es
+    container_name: fn-django-search-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - 9999:9999
+    volumes:
+      - ${PROJECTS_DIR}/python-django-vector-search:/app/FN-FTA-Services
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
+      - ES_HOST=http://host.docker.internal:9209
+      - RABBIT_HOST=host.docker.internal
+      - PUBLISH_QUEUE=fastapi_publish_queue
+      - RADIS_HOST=host.docker.internal
+      - RADIS_PORT=6379
+      - REDIS_DATABASE=0
+    networks:
+      - bridge
+
+  fn-django-search-api-test:
+    image: fn-django-search-api:test
+    container_name: fn-django-search-api-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    ports:
+      - 9998:9999
+    volumes:
+      - ${PROJECTS_DIR}/python-django-vector-search:/app/FN-FTA-Services
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
+      - ES_HOST=http://host.docker.internal:9209
+      - RABBIT_HOST=host.docker.internal
+      - PUBLISH_QUEUE=fastapi_publish_queue
+      - RADIS_HOST=host.docker.internal
+      - RADIS_PORT=6379
+      - REDIS_DATABASE=0
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    driver: bridge
