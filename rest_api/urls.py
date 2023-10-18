@@ -22,6 +22,7 @@ urlpatterns = [
     # path('docs/', TestView.as_view(), name='test'),
     path('test', TestView.as_view(), name='test1'),
     path('sample', RestapiView.as_view(), name='rest_api'),
+    # http://localhost:9999/rest_api/prometheus/metrics
     path("prometheus/", include("django_prometheus.urls"))
 ]
 

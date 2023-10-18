@@ -48,9 +48,6 @@ urlpatterns = [
     # --
     path('rest_api/', include(('rest_api.urls', 'rest_api'))),
     # path("prometheus/", include("django_prometheus.urls"))
-    # path('/', include(('rest_api.urls', 'api'))),
-    # path('sample', helloAPI, name='sample'),
-    # path("prometheus/", include("django_prometheus.urls"))
 ]
 
 
