@@ -21,4 +21,9 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("rest_api.urls")),  # new
+    # --
+    # Django REST Framework (DRF), 
+    # --
+    path('rest_api/', include('rest_api.urls')),
+#     path("prometheus/", include("django_prometheus.urls"))
 ]

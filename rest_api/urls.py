@@ -1,7 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from .views import helloAPI
 
-from .views import home_page_view
+# urlpatterns = [
+#     path("", helloAPI, name="home"),
+# ]
 
 urlpatterns = [
-    path("", home_page_view, name="home"),
+    path("swagger", helloAPI),
+    path("prometheus/", include("django_prometheus.urls"))
 ]
