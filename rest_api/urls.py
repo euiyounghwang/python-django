@@ -12,6 +12,12 @@ from drf_yasg import openapi
 from rest_framework import permissions
 # --
 
+from rest_framework import routers
+from .views import StudentViewSet, get_student_date_joined, get_note, get_note_joined, get_note_post_joined
+
+router = routers.DefaultRouter()
+router.register(r'students', StudentViewSet)
+
 # from rest_framework.routers import DefaultRouter
 
 # app_name='blog'
@@ -21,7 +27,20 @@ urlpatterns = [
     # path("swagger", helloAPI),
     # path('docs/', TestView.as_view(), name='test'),
     path('test', TestView.as_view(), name='test1'),
-    path('sample', RestapiView.as_view(), name='rest_api'),
+    
+    # path('Note', get_note, name='Note'),
+    # path('Note/<int:pk>', get_note_joined, name='Note'),
+    # path('Note', get_note_post_joined, name='Note'),
+    
+    # --
+    # es search
+    path('es/search', get_note_post_joined, name='Search'),
+    # --
+    
+    path('users', RestapiView.as_view(), name='rest_api'),
+    # path('users/<str:obj_id>', RestapiView.as_view(), name='rest_api'),
+    
+    # path('student-date-joined/<int:pk>', get_student_date_joined, name='get-student-date-joined'), # new line
     # http://localhost:9999/rest_api/prometheus/metrics
     path("prometheus/", include("django_prometheus.urls"))
 ]

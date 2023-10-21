@@ -105,6 +105,20 @@ Bypass password validation and create user anyway? [y/N]: y
 Superuser created successfully.
 ```
 
+Add Model
+```
+# models.py
+python manage.py migrate
+python manage.py makemigrations
+
+(.venv) ➜  python-django git:(master) ✗ python manage.py makemigrations
+Migrations for 'rest_api':
+  rest_api/migrations/0001_initial.py
+    - Create model Student
+    - Create model userRank
+```
+
+
 URL
 ```
 # Django
@@ -114,7 +128,8 @@ http://localhost:9999/
 http://localhost:9999/rest_api/swagger/
 
 # djangorestframework (DRF) &&  rest_framework_swagger, drf_yasg
-http://localhost:9999/docs/
+http://localhost:9999/swagger/
+http://localhost:9999/redoc/
 
 # Prometheus
 https://hodovi.cc/blog/django-monitoring-with-prometheus-and-grafana/
