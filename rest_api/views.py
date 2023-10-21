@@ -58,7 +58,7 @@ def get_note_joined(request, pk):
 @swagger_auto_schema(
     tags=["Search"],
     methods=['POST'],
-    operation_summary="Sum of Two numbers",
+    operation_summary="Search to ES",
     request_body = openapi.Schema(
     title= "Create Dataset",
     type=openapi.TYPE_OBJECT, 
@@ -95,9 +95,10 @@ def get_note_post_joined(request):
 class TestView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    @swagger_auto_schema(tags=['my custom tag'])
+    @swagger_auto_schema(tags=['Sample'], operation_summary="Swagger GET Test", metheod=['GET'], responses={200: Schema(type=TYPE_OBJECT)})
     def get(self, request):
         return Response("Swagger Interface Test")
+
 
 
 class RestapiView(APIView):
@@ -115,7 +116,7 @@ class RestapiView(APIView):
             
     
     obj_id_param = openapi.Parameter('obj_id', openapi.IN_QUERY, description="field id", type=openapi.TYPE_STRING)
-    @swagger_auto_schema(tags=['rest_api'], metheod=['GET'], manual_parameters=[obj_id_param], responses={200: Schema(type=TYPE_OBJECT)})
+    @swagger_auto_schema(tags=['rest_api'], operation_summary="Swagger GET Test", metheod=['GET'], manual_parameters=[obj_id_param], responses={200: Schema(type=TYPE_OBJECT)})
     def get(self, request, obj_id=None):
         try:
             obj_id = request.GET.get('obj_id')
@@ -136,7 +137,7 @@ class RestapiView(APIView):
     #         logger.error(e)
             
     
-    @swagger_auto_schema(tags=['rest_api'], metheod=['POST'], request_body=openapi.Schema(
+    @swagger_auto_schema(tags=['rest_api'], metheod=['POST'], operation_summary="Swagger POST Test", request_body=openapi.Schema(
     title= "Create Dataset",
     type=openapi.TYPE_OBJECT, 
     properties={
