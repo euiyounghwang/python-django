@@ -23,7 +23,7 @@ class TestView(APIView):
 
     @swagger_auto_schema(tags=['my custom tag'])
     def get(self, request):
-        return Response("Swagger 연동 테스트")
+        return Response("Swagger Interface Test")
 
 
 class RestapiView(APIView):
