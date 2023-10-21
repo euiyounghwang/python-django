@@ -15,6 +15,7 @@ django-prometheus = "^2.3.1"
 markdown = "^3.5"
 django-rest-swagger = "^2.2.0"
 drf-yasg = "^1.21.7"
+python-dotenv = "1.0.0"
 
 
 [build-system]

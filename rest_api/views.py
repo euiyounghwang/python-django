@@ -18,11 +18,12 @@ from .serializers import StudentSerializer
 
 # --
 # Service
-from .service.Handler.SearchOmniHandler import SearchOmniHandler
+# from .service.Handler.SearchOmniHandler import SearchOmniHandler
+from .injector import SearchOmniHandlerInject, logger
 
 
-logger = create_log()
-SearchOmniObject = SearchOmniHandler(logger=logger)
+# logger = create_log()
+# SearchOmniObject = SearchOmniHandler(logger=logger)
 
 
 # Create your views here.
@@ -62,7 +63,7 @@ class SearchView(APIView):
             # tutorial_data = JSONParser().parse(request)
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
-            SearchOmniObject.search()
+            SearchOmniHandlerInject.search()
             return JsonResponse({'message' : request_json})
         except Exception as e:
             logger.error(e)

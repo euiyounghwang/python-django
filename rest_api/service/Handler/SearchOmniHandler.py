@@ -5,14 +5,26 @@ import elasticsearch.exceptions
 
 class SearchOmniHandler(object):
     
-    def __init__(self, logger):
+    def __init__(self, es_client, logger):
+        self.es_client = es_client
         self.logger = logger
         
+        # --
+        # Test ES connection
+        self.es_live_validation()
+        
+        
+    def es_live_validation(self):
+        '''
+        es_client test
+        '''
+        self.logger.info(json.dumps(self.es_client.info(), indent=2))
+    
     def search(self, oas_query=None):
         if not oas_query:
             oas_query = {}
         self.logger.info("SearchOmniHandler.search")
-
+        
     
     """
     def __init__(self, es_client, logger, config):
