@@ -16,7 +16,13 @@ from drf_yasg import openapi
 from .models import Student
 from .serializers import StudentSerializer
 
+# --
+# Service
+from .service.Handler.SearchOmniHandler import SearchOmniHandler
+
+
 logger = create_log()
+SearchOmniObject = SearchOmniHandler(logger=logger)
 
 
 # Create your views here.
@@ -56,6 +62,7 @@ class SearchView(APIView):
             # tutorial_data = JSONParser().parse(request)
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
+            SearchOmniObject.search()
             return JsonResponse({'message' : request_json})
         except Exception as e:
             logger.error(e)
