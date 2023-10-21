@@ -159,3 +159,8 @@ LOGGING = {
         },
     },
 }
+
+
+# --
+# Custom Settings
+GLOBAL_ES_HOST = 'http://localhost:9209'

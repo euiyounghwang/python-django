@@ -5,6 +5,7 @@ from .config.log_config import create_log
 from .service.Handler.SearchOmniHandler import SearchOmniHandler
 from elasticsearch import Elasticsearch
 from dotenv import load_dotenv
+
 import json
 import os
 
@@ -16,7 +17,14 @@ def get_headers():
     return {'Content-type': 'application/json', 'Connection': 'close'}
 
 
-es_client = Elasticsearch(hosts=os.getenv("ES_HOST", "http://localhost:9209"),
+from django.conf import settings
+
+# --
+# Get config from settings
+# ES_HOST = os.getenv("ES_HOST", "http://localhost:9209")
+ES_HOST = os.getenv("ES_HOST", getattr(settings, 'GLOBAL_ES_HOST'))
+
+es_client = Elasticsearch(hosts=ES_HOST,
                           headers=get_headers(),
                           verify_certs=False,
                           timeout=600
