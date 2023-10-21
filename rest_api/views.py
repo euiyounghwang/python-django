@@ -27,34 +27,44 @@ class TestView(APIView):
 
 
 class RestapiView(APIView):
+    # serializer_class = ProductGetSerializer
+    
     permission_classes = [permissions.AllowAny]
     
-    @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
+    # @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
+    # def get(self, request):
+    #     try:
+    #         logger.info('request helloAPI')
+    #         return Response({'message' : 'Get: hello, world!'})
+    #     except Exception as e:
+    #         logger.error(e)
+            
+    
+    obj_id_param = openapi.Parameter('obj_id', openapi.IN_QUERY, description="field id", type=openapi.TYPE_STRING)
+    @swagger_auto_schema(tags=['rest_api'], metheod=['GET'], manual_parameters=[obj_id_param], responses={200: Schema(type=TYPE_OBJECT)})
     def get(self, request):
         try:
-            logger.info('request helloAPI')
+            obj_id = request.GET.get('obj_id')
+            logger.info('request : {}'.format(obj_id))
             return Response({'message' : 'Get: hello, world!'})
         except Exception as e:
             logger.error(e)
+            
     
-    # @swagger_auto_schema(tags=['rest_api'], method='post', request_body=login_schema, responses={200: Schema(type=TYPE_OBJECT)})
-    # @swagger_auto_schema(tags=['rest_api'], responses={
-    # status.HTTP_200_OK: Schema(
-    #     type=TYPE_OBJECT,
-    #     properties={
-    #     #    'students': Schema(
-    #     #       type=TYPE_ARRAY
-    #     #    )
-    #         "message": "hello, world!"
-    #     }
-    #    )
-    # })
-    @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
+    @swagger_auto_schema(tags=['rest_api'], metheod=['POST'], request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT, 
+    properties={
+        'x': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+        'y': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+    }),
+    responses={200: Schema(type=TYPE_OBJECT)})
     def post(self, request):
         try:
-            tutorial_data = JSONParser().parse(request)
-            # print('request : {}'.format(json.dumps(tutorial_data, indent=2)))
-            logger.info('request : {}'.format(json.dumps(tutorial_data, indent=2)))
+            # print(request.data)
+            request_json = request.data
+            # tutorial_data = JSONParser().parse(request)
+            print('request : {}'.format(json.dumps(request_json, indent=2)))
+            logger.info('request : {}'.format(json.dumps(request_json, indent=2)))
             return JsonResponse({'message' : 'Post: hello, world!'})
         except Exception as e:
             logger.error(e)
