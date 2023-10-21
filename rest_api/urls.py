@@ -13,7 +13,7 @@ from rest_framework import permissions
 # --
 
 from rest_framework import routers
-from .views import StudentViewSet, get_student_date_joined, get_note, get_note_joined, get_note_post_joined
+from .views import StudentViewSet, get_student_date_joined, get_note, get_note_joined, SearchView
 
 router = routers.DefaultRouter()
 router.register(r'students', StudentViewSet)
@@ -34,7 +34,7 @@ urlpatterns = [
     
     # --
     # es search
-    path('es/search', get_note_post_joined, name='Search'),
+    path('es/search', SearchView.get_es_search, name='Search'),
     # --
     
     path('users', RestapiView.as_view(), name='rest_api'),

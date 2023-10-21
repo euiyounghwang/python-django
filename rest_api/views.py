@@ -28,6 +28,40 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
 
 
+class SearchView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    @swagger_auto_schema(
+        tags=["Search"],
+        methods=['POST'],
+        operation_summary="Search to ES",
+        request_body = openapi.Schema(
+        title= "Create Dataset",
+        type=openapi.TYPE_OBJECT, 
+        properties={
+            'x': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_x"),
+            'y': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_y"),
+            # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
+            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27 12:48:07", format="YYYY-MM-DD HH:MM:ss"),
+        }),
+        # responses={200: Schema(type=TYPE_OBJECT)})
+        responses={200: 'Item was created'}
+        # responses={200: openapi.Schema(type=openapi.TYPE_INTEGER,title="s")}
+        )
+    @api_view(['POST'])
+    def get_es_search(request):
+        try:
+            # print(request.data)
+            request_json = request.data
+            # tutorial_data = JSONParser().parse(request)
+            # print('request : {}'.format(json.dumps(request_json, indent=2)))
+            logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
+            return JsonResponse({'message' : request_json})
+        except Exception as e:
+            logger.error(e)
+
+
+
 @api_view(["GET",])
 def get_student_date_joined(request, pk):
     """A simple view to return the date and time a student signed up"""
@@ -53,42 +87,6 @@ def get_note_joined(request, pk):
         return Response({'message' : 'Get: hello, world! [From : {}]'.format(pk)})
     except Exception as e:
         logger.error(e)
-
-
-@swagger_auto_schema(
-    tags=["Search"],
-    methods=['POST'],
-    operation_summary="Search to ES",
-    request_body = openapi.Schema(
-    title= "Create Dataset",
-    type=openapi.TYPE_OBJECT, 
-    properties={
-        'x': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_x"),
-        'y': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_y"),
-        # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
-        'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27 12:48:07", format="YYYY-MM-DD HH:MM:ss"),
-    }),
-    # responses={200: Schema(type=TYPE_OBJECT)})
-    responses={200: 'Item was created'})
-    # responses={
-    #     200: openapi.Schema(
-    #         type=openapi.TYPE_INTEGER,
-    #         title="s"
-    #     )
-#     # })
-@api_view(['POST'])
-def get_note_post_joined(request):
-    try:
-        # print(request.data)
-        request_json = request.data
-        # tutorial_data = JSONParser().parse(request)
-        print('request : {}'.format(json.dumps(request_json, indent=2)))
-        logger.info('request : {}'.format(json.dumps(request_json, indent=2)))
-        return JsonResponse({'message' : 'Post: hello, world!'})
-    except Exception as e:
-        logger.error(e)
-
-
 
 
 # Create your views here.
