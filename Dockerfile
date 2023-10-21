@@ -17,6 +17,10 @@ RUN python3 -m venv $POETRY_VENV \
 # Add `poetry` to PATH
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
 
+# Set env variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 WORKDIR /app
 
 # Copy Dependencies
@@ -27,12 +31,11 @@ RUN /bin/bash -c 'source $POETRY_VENV/bin/activate && \
 
 
 
-
 FROM --platform=linux/amd64 python:3.9.7 as runtime
 
 WORKDIR /app
 #COPY --from=indexing_environment $POETRY_VENV $POETRY_VENV
-COPY --from=indexing_environment /app .
-COPY . ES-Services
+COPY --from=environment /app .
+COPY . FN-Django-Services
 
-ENTRYPOINT ["/app/ES-Services/docker-run-entrypoints.sh"]
+ENTRYPOINT ["/app/FN-Django-Services/docker-run-entrypoints.sh"]
