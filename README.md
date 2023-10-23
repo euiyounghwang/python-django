@@ -135,3 +135,21 @@ http://localhost:9999/redoc/
 https://hodovi.cc/blog/django-monitoring-with-prometheus-and-grafana/
 http://localhost:9999/rest_api/prometheus/metrics
 ```
+
+
+Postgres
+```
+poetry add psycopg2-binary
+
+# Add this setting in settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'project',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+```

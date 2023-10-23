@@ -20,6 +20,7 @@ class SearchOmniHandler(object):
         '''
         self.logger.info(json.dumps(self.es_client.info(), indent=2))
     
+    
     def search(self, oas_query=None):
         if not oas_query:
             oas_query = {}
