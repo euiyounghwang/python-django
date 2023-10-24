@@ -108,7 +108,9 @@ Superuser created successfully.
 Add Model
 ```
 # models.py
+# -- Record & detect about the changing for the model
 python manage.py makemigrations
+# -- Update to DB if any changes in the model (this step requires in the Django)
 python manage.py migrate
 
 (.venv) ➜  python-django git:(master) ✗ python manage.py makemigrations
@@ -152,4 +154,36 @@ DATABASES = {
         'PORT': '',
     }
 }
+```
+
+Gunicorn Serive Rigistry
+```
+sudo vi /etc/systemd/system/django-gunicorn.service
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+#--
+[Service]
+User=foo
+Group=www-data
+WorkingDirectory=/home/foo/django_test/repo
+ExecStart=/Users/euiyoung.hwang/ES/Python_Workspace/python-django/.venv/bin/gunicorn \
+        --workers 3 \
+        --bind 0.0.0.0:9999 \
+        config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+#--
+
+# Run service
+systemctl daemon-reload
+# Autostart when rebooting
+sudo systemctl enable django-gunicorn.service
+systemctl start django-gunicorn
+
+systemctl status django-gunicorn.service
+● django-gunicorn.service - 
 ```
