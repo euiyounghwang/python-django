@@ -17,6 +17,7 @@ def sanitize_and_trim_text(self, text):
 
         return text[:2000]
     
+    
 def get_headers():
     ''' Elasticsearch Header '''
     return {'Content-type': 'application/json', 'Connection': 'close'}
