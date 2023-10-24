@@ -13,7 +13,7 @@ from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_STRING, TYPE_ARRAY
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Student
+from .models import Student, userRank
 from .serializers import StudentSerializer
 
 # --

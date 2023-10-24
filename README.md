@@ -108,8 +108,8 @@ Superuser created successfully.
 Add Model
 ```
 # models.py
-python manage.py migrate
 python manage.py makemigrations
+python manage.py migrate
 
 (.venv) ➜  python-django git:(master) ✗ python manage.py makemigrations
 Migrations for 'rest_api':

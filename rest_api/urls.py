@@ -14,6 +14,10 @@ from rest_framework import permissions
 
 from rest_framework import routers
 from .views import StudentViewSet, get_student_date_joined, get_note, get_note_joined, SearchView
+from .models import Student
+
+# Register your models here.
+# admin.site.register(Student)
 
 router = routers.DefaultRouter()
 router.register(r'students', StudentViewSet)

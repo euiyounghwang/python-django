@@ -7,6 +7,16 @@ class userRank(models.Model):
     deposit = models.IntegerField(default=1000000)
     earning_rate = models.FloatField(default=0)
     
+    class Meta:
+        managed = False
+        db_table = 'userank'
+        
+    def __str__(self) -> str:
+        return self.username
+    
+    def json(self):
+        return {'username':str(self.username)}
+    
 
 # Create your models here.
 class Student(models.Model):
@@ -20,6 +30,14 @@ class Student(models.Model):
     home_address = models.CharField(max_length=55)
     date = models.DateTimeField(auto_now_add=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
+    
+    class Meta:
+        managed = False
+        db_table = 'student'
 
     def __str__(self) -> str:
         return self.name
+    
+    def json(self):
+        return {'name':str(self.name)}
+
