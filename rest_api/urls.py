@@ -20,16 +20,10 @@ from .models import Student
 # admin.site.register(Student)
 
 router = routers.DefaultRouter()
-router.register(r'students', StudentViewSet)
+router.register(r'student', StudentViewSet)
 
-# from rest_framework.routers import DefaultRouter
-
-# app_name='blog'
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path('docs/', schema_view.with_ui('swagger', cache_timeout=0),name='schema-swagger-ui'),
-    # path("swagger", helloAPI),
-    # path('docs/', TestView.as_view(), name='test'),
+
     path('test', TestView.as_view(), name='test1'),
     
     # path('Note', get_note, name='Note'),
@@ -39,6 +33,12 @@ urlpatterns = [
     # --
     # es search
     path('es/search', SearchView.get_es_search, name='Search'),
+    # --
+    
+    # --
+    # Model && Serializer
+    # https://pjs21s.github.io/vuejs-restframe/
+    path('', include(router.urls)),
     # --
     
     path('users', RestapiView.as_view(), name='rest_api'),
