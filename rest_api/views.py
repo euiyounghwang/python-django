@@ -14,7 +14,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import Student, userRank
-from .serializers import StudentSerializer
+from .serializers import StudentSerializer, userRankSerializer
 
 # --
 # Service
@@ -33,6 +33,15 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class userRankViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows students to be viewed or edited.
+    """
+    queryset = userRank.objects.all()
+    serializer_class = userRankSerializer
+
 
 
 class SearchView(APIView):

@@ -13,14 +13,22 @@ from rest_framework import permissions
 # --
 
 from rest_framework import routers
-from .views import StudentViewSet, get_student_date_joined, get_note, get_note_joined, SearchView
-from .models import Student
+from .views import (
+    StudentViewSet, userRankViewSet, 
+    get_student_date_joined, get_note, get_note_joined, SearchView
+)
+from .models import Student, userRank
 
 # Register your models here.
 # admin.site.register(Student)
 
+# --
+# Model && Serializer
+# Create Model api automatically [GET, POST, PUT, DELETE]
 router = routers.DefaultRouter()
 router.register(r'student', StudentViewSet)
+router.register(r'userrank', userRankViewSet)
+ # --
 
 urlpatterns = [
 
