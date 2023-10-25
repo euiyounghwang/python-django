@@ -95,43 +95,34 @@ class userRankView(APIView):
     @swagger_auto_schema(tags=['userank'], operation_summary="userank GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
     @api_view(["GET",])
     def get_api(request, pk=None):
-        """A simple view to return the date and time a student signed up"""
-        if pk is None:
-            userRanks = userRank.objects.all()
-            logger.info("userRanks : {}".format(userRanks))
-            userRanksList = []
-            for userRankItem in userRanks:
-                userRanksList.append(
-                    {
+        """using this api for get with {id} && get_all"""
+        logger.info('request : {}'.format(request))
+        
+        # human = Human.objects.get(dog__id = dog.id)
+        userRanks = userRank.objects.all() if pk is None else userRank.objects.filter(username=pk).all()
+                    
+        logger.info("userRanks : {}".format(userRanks))
+        userRanksList = []
+        for userRankItem in userRanks:
+            userRanksList.append(
+                {
                         "username": userRankItem.username,
                         "deposit": userRankItem.deposit,
                         "earning_rate": userRankItem.earning_rate,
-                    }
-                )
+                }
+            )
 
-            return JsonResponse({"results": userRanksList}, status=200)
+        return JsonResponse({"results": userRanksList}, status=200)
         
-        logger.info('request : {}'.format(request))
-        # student = get_object_or_404(Student, pk=pk)
-        return Response({"date_joined": 'test'}, 200)
-    
-    
-    # @swagger_auto_schema(tags=['userank'], operation_summary="userank GET with Params", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
-    # @api_view(["GET",])
-    # def get_params_api(request, pk):
-    #     """A simple view to return the date and time a student signed up"""
-
-    #     logger.info('request : {}'.format(request))
-    #     logger.info('PK : {}'.format(pk))
-    #     # student = get_object_or_404(Student, pk=pk)
-    #     return Response({"date_joined": 'test'}, 200)
     
     
     @swagger_auto_schema(tags=['userank'], operation_summary="userank DELETE with Params", method='DELETE', responses={200: Schema(type=TYPE_OBJECT)})
     @api_view(["DELETE",])
     def delete_params_api(request, pk):
-        """A simple view to return the date and time a student signed up"""
-
+        """using this api for delete with {id}"""
+        if pk is None:
+            # logger.info("userRanks : {}".format(userRanks))
+            return JsonResponse({"results": userRanksList}, status=200)
         logger.info('request : {}'.format(request))
         logger.info('PK : {}'.format(pk))
         # student = get_object_or_404(Student, pk=pk)
