@@ -131,3 +131,44 @@ class RestapiView(APIView):
             logger.info('request : {}'.format(json.dumps(tutorial_data, indent=2)))
             return JsonResponse({'message' : 'Post: hello, world!'})
     '''
+
+
+
+class userRankView(APIView):
+    def get(self, request):
+
+        userRank = userRank.objects.all()
+        # humanList = []
+
+        # for human in humans:
+        #     humanList.append(
+        #         {
+        #             "name": human.name,
+        #             "email": human.email,
+        #             "age": human.age,
+        #         }
+        #     )
+
+        # return JsonResponse({"humans": humanList}, status=200)
+        return JsonResponse({"humans": {}}, status=200)
+
+    def post(self, request):
+        data = json.loads(request.body)
+
+        # human = Human.objects.create(
+        #     name=data["name"],
+        #     email=data["email"],
+        #     age=data["age"]
+        # )
+
+        # return JsonResponse({"message": "SUCCESS"}, status=201)
+        return JsonResponse({"message": "SUCCESS"}, status=201)
+    
+    def put(self, request):
+        data = json.loads(request.body)
+        return JsonResponse({"message": "SUCCESS"}, status=201)
+    
+    
+    def delete(self, request):
+        data = json.loads(request.body)
+        return JsonResponse({"message": "SUCCESS"}, status=201)

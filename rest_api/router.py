@@ -11,5 +11,5 @@ from .views import (
 # Create Model api automatically [GET, POST, PUT, DELETE]
 router = routers.DefaultRouter()
 router.register(r'student', StudentViewSet)
-router.register(r'userrank', userRankViewSet)
+# router.register(r'userrank', userRankViewSet)
  # --

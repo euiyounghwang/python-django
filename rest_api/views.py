@@ -2,7 +2,10 @@ from django.shortcuts import render
 
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+
 from rest_framework.views import APIView
+from django.views import View
+
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -25,7 +28,9 @@ from .injector import SearchOmniHandlerInject, logger
 # logger = create_log()
 # SearchOmniObject = SearchOmniHandler(logger=logger)
 
-
+# --
+# Class Based View for Create, Read, Update, Delete
+# Increased productivity, readability
 # Create your views here.
 class StudentViewSet(viewsets.ModelViewSet):
     """
@@ -76,3 +81,39 @@ class SearchView(APIView):
             return JsonResponse({'message' : request_json})
         except Exception as e:
             logger.error(e)
+            
+            
+            
+
+class userRankView(APIView):
+    """
+    Custom REST API GET, PUT, DELETE, POST
+    """
+
+    @swagger_auto_schema(tags=['userank'], operation_summary="userank GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_api(request, pk):
+        """A simple view to return the date and time a student signed up"""
+        logger.info('request : {}'.format(request))
+        # student = get_object_or_404(Student, pk=pk)
+        return Response({"date_joined": 'test'}, 200)
+    
+    @swagger_auto_schema(tags=['userank'], operation_summary="userank GET with Params", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_params_api(request, pk):
+        """A simple view to return the date and time a student signed up"""
+
+        logger.info('request : {}'.format(request))
+        logger.info('PK : {}'.format(pk))
+        # student = get_object_or_404(Student, pk=pk)
+        return Response({"date_joined": 'test'}, 200)
+    
+    @swagger_auto_schema(tags=['userank'], operation_summary="userank DELETE with Params", method='DELETE', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["DELETE",])
+    def delete_params_api(request, pk):
+        """A simple view to return the date and time a student signed up"""
+
+        logger.info('request : {}'.format(request))
+        logger.info('PK : {}'.format(pk))
+        # student = get_object_or_404(Student, pk=pk)
+        return Response({"date_joined": 'test'}, 200)

@@ -10,12 +10,13 @@ from drf_yasg import openapi
 from rest_framework import permissions
 
 from .views import (
-    StudentViewSet, userRankViewSet, SearchView
+    StudentViewSet, userRankViewSet, SearchView,
+    userRankView
 )
 
 from .views_test import (
     RestapiView, TestView,
-    get_student_date_joined, get_note, get_note_joined
+    get_student_date_joined, get_note, get_note_joined,
 )
 
 # from .models import Student, userRank
@@ -42,10 +43,19 @@ urlpatterns = [
     path('es/search', SearchView.get_es_search, name='Search'),
     # --
     
+    # path('userRank/', userRankView.as_view(), name='userRank'),
+    
     # --
-    # Model && Serializer
+    # Model && Serializer (Create CRUD automatically)
     # https://pjs21s.github.io/vuejs-restframe/
     path('', include(router.urls)),
+    # --
+    
+    # --
+    # Model && Custom API
+    path('userRank/', userRankView.get_api, name='userRank'),
+    path('userRank/<str:pk>', userRankView.get_params_api, name='userRank'),
+    path('userRank/<str:id>', userRankView.delete_params_api, name='userRank'),
     # --
     
     path('users', RestapiView.as_view(), name='rest_api'),
