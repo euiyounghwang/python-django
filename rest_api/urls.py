@@ -60,7 +60,7 @@ urlpatterns = [
     # --
     # Model && Custom API
     path('userRank', userRankView.get_api, name='userRank'),
-    path('userRank/<str:pk>/', userRankView.get_api, name='userRank'),
+    path('userRank/<str:pk>', userRankView.get_api, name='userRank'),
     path('userRank/<str:username>/', userRankView.delete_params_api, name='userRank'),
     path('userRank/', userRankView.post_params_api, name='userRank'),
     # --
