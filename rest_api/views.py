@@ -118,12 +118,50 @@ class userRankView(APIView):
     
     @swagger_auto_schema(tags=['userank'], operation_summary="userank DELETE with Params", method='DELETE', responses={200: Schema(type=TYPE_OBJECT)})
     @api_view(["DELETE",])
-    def delete_params_api(request, pk):
+    def delete_params_api(request, username=None):
         """using this api for delete with {id}"""
-        if pk is None:
+        if username is None:
             # logger.info("userRanks : {}".format(userRanks))
             return JsonResponse({"results": userRanksList}, status=200)
         logger.info('request : {}'.format(request))
-        logger.info('PK : {}'.format(pk))
+        logger.info('username : {}'.format(username))
         # student = get_object_or_404(Student, pk=pk)
-        return Response({"date_joined": 'test'}, 200)
+        userRanks = userRank.objects.filter(username=username).all()
+        if userRanks:
+            logger.info('Item was existing : {}'.format(username))
+            userRanks.delete()
+            return JsonResponse({"results": 'Item was deleted'}, status=200)
+        return JsonResponse({"results": 'Item was not found'}, status=500) 
+    
+    
+    @swagger_auto_schema(
+        tags=["userank"],
+        methods=['POST'],
+        operation_summary="userank POST with Params",
+        request_body = openapi.Schema(
+        title= "Create Dataset",
+        type=openapi.TYPE_OBJECT, 
+        properties={
+            'username': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test"),
+            'deposit': openapi.Schema(type=openapi.TYPE_INTEGER, description='int', example=1111),
+            'earning_rate': openapi.Schema(type=openapi.TYPE_INTEGER, description='int', example=11)
+            # 'earning_rate': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
+            # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27 12:48:07", format="YYYY-MM-DD HH:MM:ss"),
+        }),
+        responses={200: 'Item was created'})
+    @api_view(['POST'])
+    def post_params_api(request):
+        request_json = request.data
+        logger.info("post_params_api : {}".format(json.dumps(request_json, indent=2)))
+        
+        try:
+            # --
+            userRankCreate = userRank.objects.create(
+                username = request_json.get("username"),
+                deposit =  request_json.get("deposit"),
+                earning_rate = request_json.get("earning_rate"),
+            )
+            return JsonResponse({"results": 'Item was created'}, status=200)
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({"results": str(e)}, status=500)

@@ -46,10 +46,10 @@ urlpatterns = [
     # path(r'^admin/$', admin.site.urls),
     # --
     # User Interface App
-    path('rest_api/', include(('rest_api.urls', 'rest_api'))),
+    path('rest_ui/', include(('rest_ui.urls', 'rest_ui'))),
     # --
     # Django REST Framework (DRF), 
-    path('rest_ui/', include(('rest_ui.urls', 'rest_ui'))),
+    path('rest_api/', include(('rest_api.urls', 'rest_api'))),
     path('book_rest_api/', include(('book_rest_api.urls', 'book_rest_api'))),
     # --
     # path("prometheus/", include("django_prometheus.urls"))
