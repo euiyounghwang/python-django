@@ -11,7 +11,8 @@ from rest_framework import permissions
 
 from .views import (
     StudentViewSet, userRankViewSet, SearchView,
-    userRankView
+    userRankView,
+    # rest_apis
 )
 
 from .views_test import (
@@ -43,10 +44,15 @@ urlpatterns = [
     path('es/search', SearchView.get_es_search, name='Search'),
     # --
     
-    # path('userRank/', userRankView.as_view(), name='userRank'),
+    
+    # --
+    # Render Template using HTTPResponse to the browser)
+    #  path('', rest_apis, name='rest_api'),
+    # --
     
     # --
     # Model && Serializer (Create CRUD automatically)
+    # import router.py
     # https://pjs21s.github.io/vuejs-restframe/
     path('', include(router.urls)),
     # --

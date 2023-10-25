@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # --
     "rest_api",
-    'book_rest_api'		 
+    'book_rest_api',
+    "rest_ui" 
 ]
 
 MIDDLEWARE = [

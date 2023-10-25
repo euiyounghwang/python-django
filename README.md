@@ -127,6 +127,9 @@ URL
 # Django
 http://localhost:9999/
 
+# Django UI
+http://localhost:9999/rest_ui/
+
 # djangorestframework (DRF) <- Instead of djangorestframework, build Swagger from config.urls (This above url's not working )
 http://localhost:9999/rest_api/swagger/
 
