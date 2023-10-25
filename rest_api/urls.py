@@ -1,6 +1,4 @@
 from django.urls import path, include, re_path
-from .views import RestapiView, TestView
-
 from django.contrib import admin
 
 # --
@@ -10,14 +8,17 @@ from drf_yasg.views import get_schema_view
 from django.conf import settings
 from drf_yasg import openapi
 from rest_framework import permissions
-# --
 
-from rest_framework import routers
 from .views import (
-    StudentViewSet, userRankViewSet, 
-    get_student_date_joined, get_note, get_note_joined, SearchView
+    StudentViewSet, userRankViewSet, SearchView
 )
-from .models import Student, userRank
+
+from .views_test import (
+    RestapiView, TestView,
+    get_student_date_joined, get_note, get_note_joined
+)
+
+# from .models import Student, userRank
 
 # Register your models here.
 # admin.site.register(Student)
@@ -25,9 +26,7 @@ from .models import Student, userRank
 # --
 # Model && Serializer
 # Create Model api automatically [GET, POST, PUT, DELETE]
-router = routers.DefaultRouter()
-router.register(r'student', StudentViewSet)
-router.register(r'userrank', userRankViewSet)
+from .router import router
  # --
 
 urlpatterns = [
