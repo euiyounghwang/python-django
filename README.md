@@ -19,6 +19,7 @@ https://velog.io/@zueon/DRF-%EA%B8%B0%EC%B4%88
 # --
 # Swagger
 https://episyche.com/blog/how-to-create-django-api-documentation-using-swagger
+https://pjs21s.github.io/vuejs-restframe/
 ```
 
 
@@ -108,8 +109,10 @@ Superuser created successfully.
 Add Model
 ```
 # models.py
-python manage.py migrate
+# -- Record & detect about the changing for the model
 python manage.py makemigrations
+# -- Update to DB if any changes in the model (this step requires in the Django)
+python manage.py migrate
 
 (.venv) ➜  python-django git:(master) ✗ python manage.py makemigrations
 Migrations for 'rest_api':
@@ -124,6 +127,9 @@ URL
 # Django
 http://localhost:9999/
 
+# Django UI
+http://localhost:9999/rest_ui/
+
 # djangorestframework (DRF) <- Instead of djangorestframework, build Swagger from config.urls (This above url's not working )
 http://localhost:9999/rest_api/swagger/
 
@@ -134,4 +140,54 @@ http://localhost:9999/redoc/
 # Prometheus
 https://hodovi.cc/blog/django-monitoring-with-prometheus-and-grafana/
 http://localhost:9999/rest_api/prometheus/metrics
+```
+
+
+Postgres
+```
+poetry add psycopg2-binary
+
+# Add this setting in settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'project',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+```
+
+Gunicorn Serive Rigistry
+```
+sudo vi /etc/systemd/system/django-gunicorn.service
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+#--
+[Service]
+User=foo
+Group=www-data
+WorkingDirectory=/home/foo/django_test/repo
+ExecStart=/Users/euiyoung.hwang/ES/Python_Workspace/python-django/.venv/bin/gunicorn \
+        --workers 3 \
+        --bind 0.0.0.0:9999 \
+        config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+#--
+
+# Run service
+systemctl daemon-reload
+# Autostart when rebooting
+sudo systemctl enable django-gunicorn.service
+systemctl start django-gunicorn
+
+systemctl status django-gunicorn.service
+● django-gunicorn.service - 
 ```

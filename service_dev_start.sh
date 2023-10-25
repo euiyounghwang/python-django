@@ -10,7 +10,12 @@ cd $SCRIPTDIR
 source .venv/bin/activate
 
 # poetry run python manage.py migrate 
+# -- runserver is for dev env
 poetry run python manage.py runserver 9999
+
+# -- NginX + Gunicorn for Prod
+# https://wikidocs.net/6601
+# poetry run gunicorn -w 2 --bind 0:9999 config.wsgi:application
 
 # Create project
 # python manage.py startapp rest_api

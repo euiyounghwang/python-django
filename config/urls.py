@@ -42,11 +42,14 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    # path(r'^admin/$', admin.site.urls),
     # --
     # Django REST Framework (DRF), 
     # --
     path('rest_api/', include(('rest_api.urls', 'rest_api'))),
+    path('rest_ui/', include(('rest_ui.urls', 'rest_ui'))),
+    path('book_rest_api/', include(('book_rest_api.urls', 'book_rest_api'))),
     # path("prometheus/", include("django_prometheus.urls"))
 ]
 

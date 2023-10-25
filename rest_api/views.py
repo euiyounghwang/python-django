@@ -2,7 +2,10 @@ from django.shortcuts import render
 
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+
 from rest_framework.views import APIView
+from django.views import View
+
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -13,18 +16,21 @@ from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_STRING, TYPE_ARRAY
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Student
-from .serializers import StudentSerializer
+from .models import Student, userRank
+from .serializers import StudentSerializer, userRankSerializer
 
 # --
 # Service
-from .service.Handler.SearchOmniHandler import SearchOmniHandler
+# from .service.Handler.SearchOmniHandler import SearchOmniHandler
+from .injector import SearchOmniHandlerInject, logger
 
 
-logger = create_log()
-SearchOmniObject = SearchOmniHandler(logger=logger)
+# logger = create_log()
+# SearchOmniObject = SearchOmniHandler(logger=logger)
 
-
+# --
+# Class Based View for Create, Read, Update, Delete
+# Increased productivity, readability
 # Create your views here.
 class StudentViewSet(viewsets.ModelViewSet):
     """
@@ -32,6 +38,15 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class userRankViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows students to be viewed or edited.
+    """
+    queryset = userRank.objects.all()
+    serializer_class = userRankSerializer
+
 
 
 class SearchView(APIView):
@@ -62,120 +77,53 @@ class SearchView(APIView):
             # tutorial_data = JSONParser().parse(request)
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
-            SearchOmniObject.search()
+            SearchOmniHandlerInject.search()
             return JsonResponse({'message' : request_json})
         except Exception as e:
             logger.error(e)
-
-
-
-@api_view(["GET",])
-def get_student_date_joined(request, pk):
-    """A simple view to return the date and time a student signed up"""
-
-    student = get_object_or_404(Student, pk=pk)
-    return Response({"date_joined": student.date}, 200)
-
-
-
-@api_view(["GET",])
-def get_note(request):
-    try:
-        # obj_id = request.GET.get('obj_id')
-        # logger.info('request : {}'.format(obj_id))
-        return Response({'message' : 'Get: hello, world!'})
-    except Exception as e:
-        logger.error(e)
-
-@api_view(["GET",])
-def get_note_joined(request, pk):
-    try:
-        logger.info('request : {}'.format(pk))
-        return Response({'message' : 'Get: hello, world! [From : {}]'.format(pk)})
-    except Exception as e:
-        logger.error(e)
-
-
-# Create your views here.
-class TestView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    @swagger_auto_schema(tags=['Sample'], operation_summary="Swagger GET Test", metheod=['GET'], responses={200: Schema(type=TYPE_OBJECT)})
-    def get(self, request):
-        return Response("Swagger Interface Test")
-
-
-
-class RestapiView(APIView):
-    # serializer_class = ProductGetSerializer
-    
-    permission_classes = [permissions.AllowAny]
-    
-    # @swagger_auto_schema(tags=['rest_api'], responses={200: Schema(type=TYPE_OBJECT)})
-    # def get(self, request):
-    #     try:
-    #         logger.info('request helloAPI')
-    #         return Response({'message' : 'Get: hello, world!'})
-    #     except Exception as e:
-    #         logger.error(e)
-            
-    
-    obj_id_param = openapi.Parameter('obj_id', openapi.IN_QUERY, description="field id", type=openapi.TYPE_STRING)
-    @swagger_auto_schema(tags=['rest_api'], operation_summary="Swagger GET Test", metheod=['GET'], manual_parameters=[obj_id_param], responses={200: Schema(type=TYPE_OBJECT)})
-    def get(self, request, obj_id=None):
-        try:
-            obj_id = request.GET.get('obj_id')
-            logger.info('request : {}'.format(obj_id))
-            return Response({'message' : 'Get: hello, world!'})
-        except Exception as e:
-            logger.error(e)
             
             
-    # obj_id_param = openapi.Parameter('obj_id', openapi.IN_QUERY, description="field id", type=openapi.TYPE_STRING)
-    # @swagger_auto_schema(tags=['rest_api'], metheod=['GET'], responses={200: Schema(type=TYPE_OBJECT)})
-    # def get(self, request, obj_id):
-    #     try:
-    #         obj_id = request.GET.get('obj_id')
-    #         logger.info('request : {}'.format(obj_id))
-    #         return Response({'message' : 'Get: hello, world!'})
-    #     except Exception as e:
-    #         logger.error(e)
             
-    
-    @swagger_auto_schema(tags=['rest_api'], metheod=['POST'], operation_summary="Swagger POST Test", request_body=openapi.Schema(
-    title= "Create Dataset",
-    type=openapi.TYPE_OBJECT, 
-    properties={
-        'x': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_x"),
-        'y': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_y"),
-        # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
-        'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27 12:48:07", format="YYYY-MM-DD HH:MM:ss"),
-    }),
-    # responses={200: Schema(type=TYPE_OBJECT)})
-    responses={200: 'Item was created'})
-    def post(self, request):
-        try:
-            # print(request.data)
-            request_json = request.data
-            # tutorial_data = JSONParser().parse(request)
-            print('request : {}'.format(json.dumps(request_json, indent=2)))
-            logger.info('request : {}'.format(json.dumps(request_json, indent=2)))
-            return JsonResponse({'message' : 'Post: hello, world!'})
-        except Exception as e:
-            logger.error(e)
+# --
+# REST API : CRUD Custom URL Patterns to this class
+# https://walkingplow.tistory.com/25
+class userRankView(APIView):
+    """
+    Custom REST API GET, PUT, DELETE, POST
+    """
 
-    '''
-    @api_view(['GET', 'POST'])
-    @swagger_auto_schema(tags=['rest_api'])
-    def helloAPI(self, request):
-        if request.method == 'GET':
-            # return Response("hello, world!")
-            logger.info('request helloAPI')
-            return Response({'message' : 'Get: hello, world!'})
+    @swagger_auto_schema(tags=['userank'], operation_summary="userank GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_api(request, pk=None):
+        """using this api for get with {id} && get_all"""
+        logger.info('request : {}'.format(request))
         
-        elif request.method == 'POST':
-            tutorial_data = JSONParser().parse(request)
-            # print('request : {}'.format(json.dumps(tutorial_data, indent=2)))
-            logger.info('request : {}'.format(json.dumps(tutorial_data, indent=2)))
-            return JsonResponse({'message' : 'Post: hello, world!'})
-    '''
+        # human = Human.objects.get(dog__id = dog.id)
+        userRanks = userRank.objects.all() if pk is None else userRank.objects.filter(username=pk).all()
+                    
+        logger.info("userRanks : {}".format(userRanks))
+        userRanksList = []
+        for userRankItem in userRanks:
+            userRanksList.append(
+                {
+                        "username": userRankItem.username,
+                        "deposit": userRankItem.deposit,
+                        "earning_rate": userRankItem.earning_rate,
+                }
+            )
+
+        return JsonResponse({"results": userRanksList}, status=200)
+        
+    
+    
+    @swagger_auto_schema(tags=['userank'], operation_summary="userank DELETE with Params", method='DELETE', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["DELETE",])
+    def delete_params_api(request, pk):
+        """using this api for delete with {id}"""
+        if pk is None:
+            # logger.info("userRanks : {}".format(userRanks))
+            return JsonResponse({"results": userRanksList}, status=200)
+        logger.info('request : {}'.format(request))
+        logger.info('PK : {}'.format(pk))
+        # student = get_object_or_404(Student, pk=pk)
+        return Response({"date_joined": 'test'}, 200)

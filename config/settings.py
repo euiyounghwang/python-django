@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    #--
+    # Cross Domain (poetry add django-cors-headers)
+    'corsheaders',
     # --
     # Django Prometheus
     "django_prometheus",
@@ -51,7 +54,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # --
     "rest_api",
-    'book_rest_api'		 
+    'book_rest_api',
+    "rest_ui" 
 ]
 
 MIDDLEWARE = [
@@ -63,11 +67,41 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # --
+    # Cross Domain (poetry add django-cors-headers)
+    "corsheaders.middleware.CorsMiddleware",
+    # --
     # Django Prometheus
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware"
     # --
 ]
+
+# --
+# Cross Domain (poetry add django-cors-headers)
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+# --
 
 ROOT_URLCONF = "config.urls"
 
@@ -93,10 +127,22 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+"""
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',  # database name
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '15432',
     }
 }
 
@@ -130,6 +176,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -159,3 +207,8 @@ LOGGING = {
         },
     },
 }
+
+
+# --
+# Custom Settings
+GLOBAL_ES_HOST = 'http://localhost:9209'
