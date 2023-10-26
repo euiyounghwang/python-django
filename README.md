@@ -123,7 +123,7 @@ Migrations for 'rest_api':
 
 
 URL
-```
+```http
 # Django
 http://localhost:9999/
 
@@ -145,6 +145,7 @@ http://localhost:9999/rest_api/prometheus/metrics
 
 Postgres
 ```
+# To be able to use PostgreSQL in Django we have to install a package called psycopg2.
 poetry add psycopg2-binary
 
 # Add this setting in settings.py

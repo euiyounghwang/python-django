@@ -34,11 +34,19 @@ def rest_apis(request, page=20):
   '''
   
 #   logger.info("students : {}".format(json.dumps(students, indent=2)))
-  template = loader.get_template('default/all_students.html')
+  # template = loader.get_template('default/all_students.html')
+  
   context = {
     'students': students,
     'copystudents' : students
   }
+  '''
+  context = {
+    'students': [{'name': 'test', 'grade': 'test'}],
+    'copystudents' : students
+  }
+  '''
 #   return HttpResponse(template.render(context, request))
-  return render(request, 'default/all_students.html', context)
+  # return render(request, 'default/all_students.html', context)
+  return render(request, 'default/dttables.html', context)
 
