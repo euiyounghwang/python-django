@@ -29,7 +29,7 @@ https://python-poetry.org/docs/?ref=dylancastillo.co#installing-with-the-officia
 ```
 
 Using Poetry: Create the virtual environment in the same directory as the project and install the dependencies:
-```
+```bash
 django-admin startproject python-django
 poetry config virtualenvs.in-project true
 poetry init
@@ -37,14 +37,14 @@ poetry init
 
 
 Create virtualenv
-```
+```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
 
 Poetry install
-```
+```bash
 poetry install
 poetry add djangorestframework
 # For Swqgger
@@ -53,7 +53,7 @@ poetry add drf-yasg
 ```
 
 Add 'rest_framework' to your INSTALLED_APPS setting.
-```
+```bash
 INSTALLED_APPS = [
     ...
     # --
@@ -72,7 +72,7 @@ INSTALLED_APPS = [
 ```
 
 Create project
-```
+```bash
 source .venv/bin/activate
 poetry run python manage.py migrate 
 # Create rest_api app
@@ -82,12 +82,12 @@ python manage.py startapp book_rest_api
 ```
 
 Run server
-```
+```bash
 python manage.py runserver 9999
 ```
 
 Django Admin Page (http://localhost:9999/admin)
-```
+```bash
 python manage.py migrate
 
 (.venv) ➜  python-django git:(master) ✗ python manage.py createsuperuser
@@ -107,7 +107,7 @@ Superuser created successfully.
 ```
 
 Add Model
-```
+```bash
 # models.py
 # -- Record & detect about the changing for the model
 python manage.py makemigrations
@@ -144,7 +144,7 @@ http://localhost:9999/rest_api/prometheus/metrics
 
 
 Postgres
-```
+```bash
 # To be able to use PostgreSQL in Django we have to install a package called psycopg2.
 poetry add psycopg2-binary
 
@@ -162,7 +162,7 @@ DATABASES = {
 ```
 
 Gunicorn Serive Rigistry
-```
+```bash
 sudo vi /etc/systemd/system/django-gunicorn.service
 
 [Unit]
