@@ -213,3 +213,4 @@ LOGGING = {
 # --
 # Custom Settings
 GLOBAL_ES_HOST = 'http://localhost:9209'
+GLOBAL_HOST_URL = 'http://localhost:9999'

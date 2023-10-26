@@ -20,6 +20,7 @@ from django.conf import settings
 # ES_HOST = os.getenv("ES_HOST", "http://localhost:9209")
 # Docker -e argument
 ES_HOST = os.getenv("ES_HOST", getattr(settings, 'GLOBAL_ES_HOST'))
+URL_HOST = os.getenv("ES_HOST", getattr(settings, 'GLOBAL_HOST_URL'))
 
 es_client = Elasticsearch(hosts=ES_HOST,
                           headers=get_headers(),

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <style>
+        .main {
+            width: 1000px;
+        }
+
+        .book {
+            border: 2px solid #767676;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            padding: 5px;
+        }
+
+        .author {
+            background-color: #7878785e;
+            width: 220px;
+            padding: 5px
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <form method="post">
+        <input type="text" name="keyword">
+        <input type="submit">
+    </form>
+    <h1> page_title </h1>
+    {% for studnet in students %}
+        <div class="book">
+            <h2>{{ studnet.name }}</h2>
+            <p>{{ studnet.home_address }}</p>
+            <p class="author">Author: {{ studnet.name }}</p>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>

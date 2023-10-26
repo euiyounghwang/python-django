@@ -83,6 +83,15 @@ class SearchView(APIView):
             logger.error(e)
             
             
+    @api_view(["GET",])
+    def get_search(request):
+        try:
+            logger.info("ES get_search")
+            return Response({'message' : 'Get: hello, search world!'})
+        except Exception as e:
+            logger.error(e)
+                
+            
             
 # --
 # REST API : CRUD Custom URL Patterns to this class
