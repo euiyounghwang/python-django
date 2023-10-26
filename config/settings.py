@@ -72,8 +72,9 @@ MIDDLEWARE = [
     # --
     # Django Prometheus
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
-    "django_prometheus.middleware.PrometheusAfterMiddleware"
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
     # --
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # --
