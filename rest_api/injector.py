@@ -3,6 +3,7 @@ from .config.log_config import create_log
 # from config import config
 # from service.Handler.search.SearchOmniHandler import (SearchOmniHandler)
 from .service.Handler.SearchOmniHandler import (SearchOmniHandler)
+from .service.Handler.QueryBuilder import QueryBuilder
 from .service.Utils.ES_Utils import (get_headers)
 from elasticsearch import Elasticsearch
 from dotenv import load_dotenv
@@ -29,3 +30,4 @@ es_client = Elasticsearch(hosts=ES_HOST,
 )
 
 SearchOmniHandlerInject = SearchOmniHandler(es_client, logger)
+QueryBuilderInject = QueryBuilder(es_client, logger)

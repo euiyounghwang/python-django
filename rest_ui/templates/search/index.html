@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load humanize %}
 <head>
     <meta charset="UTF-8">
     <title>Django Search Results</title>
@@ -22,7 +23,7 @@
 
         .author {
             background-color: #7878785e;
-            width: 220px;
+            width: 150px;
             padding: 5px
         }
    </style>
@@ -117,8 +118,7 @@
         </div>
     </div>
     {% if response %}
-    <p align='right'>Search Results.. : <b>{{ total }}</b> docs..</p>
-    {% endif %}
+    <p align='right'>Search Results.. : <b>{{ total | intcomma}}</b> docs..</p>
     {% for hit in response %}
         <div class="book">
             <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
@@ -127,8 +127,12 @@
             <p>{{ k}} - {{ v | safe}}</p>
             {% endfor %}        
             <p class="author">Author: {{ hit.source.director }}</p>
+            <p class="author">Score: {{ hit.score }}</p>
         </div>
     {% endfor %}
+    {% else %}
+    <p align='right'>Search Results.. : <b>{{ total }}</b> docs..</p>
+    {% endif %}
 </div>
 <br/>
 {% if response %}

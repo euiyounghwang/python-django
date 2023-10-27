@@ -83,4 +83,5 @@ def rest_search_apis(request):
     logger.warn("It's not processing from SEARCH.HTML")
    
   context = search_handler.Search(keyword)
+  # logger.info('context : {}'.format(context))
   return render(request, 'search/index.html', context)

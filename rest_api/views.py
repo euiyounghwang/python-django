@@ -22,7 +22,7 @@ from .serializers import StudentSerializer, userRankSerializer
 # --
 # Service
 # from .service.Handler.SearchOmniHandler import SearchOmniHandler
-from .injector import SearchOmniHandlerInject, logger
+from .injector import SearchOmniHandlerInject, QueryBuilderInject, logger
 
 
 # logger = create_log()
@@ -84,7 +84,7 @@ class SearchView(APIView):
             # tutorial_data = JSONParser().parse(request)
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
-            response = SearchOmniHandlerInject.search(request_json)
+            response = SearchOmniHandlerInject.search(QueryBuilderInject, request_json)
             return JsonResponse({'message' : response}, status=200)
         except Exception as e:
             logger.error(e)
