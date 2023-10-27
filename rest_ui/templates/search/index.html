@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage</title>
+    <title>Django Search Results</title>
+    <link rel="icon" type="image/x-icon" href="https://help.apiary.io/images/swagger-logo.png">
     <style>
         .main {
             width: 1000px;
         }
 
         .book {
-            border: 2px solid #767676;
+            border: 2px solid #d0cdcd;
             border-radius: 5px;
             margin-bottom: 5px;
             padding: 5px;
@@ -28,12 +29,15 @@
         <input type="text" name="keyword">
         <input type="submit">
     </form>
-    <h1> page_title </h1>
-    {% for studnet in students %}
+    <h1> Search Resluts.. : {{ total }} docs..</h1>
+    {% for hit in response %}
         <div class="book">
-            <h2>{{ studnet.name }}</h2>
-            <p>{{ studnet.home_address }}</p>
-            <p class="author">Author: {{ studnet.name }}</p>
+            <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
+            <p>{{ hit.source.plot | slice:1000 }}..</p>
+            {% for k, v in hit.highlight.items %}
+            <p>{{ k}} - {{ v | safe}}</p>
+            {% endfor %}        
+            <p class="author">Author: {{ hit.source.director }}</p>
         </div>
     {% endfor %}
 </div>

@@ -68,11 +68,22 @@ def rest_search_apis(request, page=20):
                          headers=RequestObject.get_header()
                          )
   # logger.info(result.content, type(result.content)) # (<class 'bytes'>,)
-  logger.info(result.json())
-  # logger.info(json.dumps(json.loads(result.content), indent=2))
   logger.info(json.dumps(result.json(), indent=2))
+  # logger.info(json.dumps(RequestObject.get_search_result()['hits'], indent=2))
   
+  hits = []
+  # response_results_json = result.json()
+  response_results_json = RequestObject.get_search_result()
+  for hit in response_results_json['hits']:
+    each_dict = hit
+    # print(hit)
+    if '_source' in each_dict: 
+      each_dict.update({"source" : hit['_source']})
+      del each_dict['_source']
+    hits.append(each_dict)
+    
   context = {
-    'students': [{'name': 'test', 'grade': 'test'}],
+    'response': hits,
+    'total' : int(response_results_json['total']['value'])
   }
   return render(request, 'search/index.html', context)

@@ -51,7 +51,7 @@ class userRankViewSet(viewsets.ModelViewSet):
 
 class SearchView(APIView):
     permission_classes = [permissions.AllowAny]
-    
+ 
     @swagger_auto_schema(
         tags=["Search"],
         methods=['POST'],
@@ -60,13 +60,20 @@ class SearchView(APIView):
         title= "Create Dataset",
         type=openapi.TYPE_OBJECT, 
         properties={
-            'x': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_x"),
-            'y': openapi.Schema(type=openapi.TYPE_STRING, description='string', example="test_y"),
+            'include_basic_aggs': openapi.Schema(type=TYPE_STRING, description='boolean', example="true"),
+            'pit_id': openapi.Schema(type=openapi.TYPE_STRING, description='pit_id', example=""),
+            'query_string': openapi.Schema(type=openapi.TYPE_STRING, description='query_string', example="video"),
+            'size': openapi.Schema(type=openapi.TYPE_INTEGER, description='size', example=20),
+            'sort_order': openapi.Schema(type=openapi.TYPE_STRING, description='sort_order', example="DESC"),
             # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
-            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27 12:48:07", format="YYYY-MM-DD HH:MM:ss"),
+            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2021 01-01 00:00:00", format="YYYY-MM-DD HH:MM:ss"),
         }),
         # responses={200: Schema(type=TYPE_OBJECT)})
-        responses={200: 'Item was created'}
+        responses={
+            200: 'Search results was returned..',
+            404: 'Search results was not returned..',
+            500: 'Server has an error..',
+        }
         # responses={200: openapi.Schema(type=openapi.TYPE_INTEGER,title="s")}
         )
     @api_view(['POST'])
@@ -78,9 +85,10 @@ class SearchView(APIView):
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
             SearchOmniHandlerInject.search()
-            return JsonResponse({'message' : request_json})
+            return JsonResponse({'message' : request_json}, status=200)
         except Exception as e:
             logger.error(e)
+            return JsonResponse({'message' : str(e)}, status=500)
             
             
     @api_view(["GET",])
