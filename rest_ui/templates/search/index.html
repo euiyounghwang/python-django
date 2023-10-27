@@ -122,12 +122,12 @@
     {% for hit in response %}
         <div class="book">
             <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
-            <p>{{ hit.source.plot | slice:1000 }}..</p>
+            <p>{{ hit.source.plot | slice:500 }}..</p>
             {% for k, v in hit.highlight.items %}
             <p>{{ k}} - {{ v | safe}}</p>
             {% endfor %}        
             <p class="author">Author: {{ hit.source.director }}</p>
-            <p class="author">Score: {{ hit.score }}</p>
+            <p class="author"><b>Score: {{ hit.score }}</b></p>
         </div>
     {% endfor %}
     {% else %}
