@@ -84,8 +84,8 @@ class SearchView(APIView):
             # tutorial_data = JSONParser().parse(request)
             # print('request : {}'.format(json.dumps(request_json, indent=2)))
             logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
-            SearchOmniHandlerInject.search()
-            return JsonResponse({'message' : request_json}, status=200)
+            response = SearchOmniHandlerInject.search(request_json)
+            return JsonResponse({'message' : response}, status=200)
         except Exception as e:
             logger.error(e)
             return JsonResponse({'message' : str(e)}, status=500)

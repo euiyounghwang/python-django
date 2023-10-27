@@ -24,8 +24,9 @@ class SearchOmniHandler(object):
     def search(self, oas_query=None):
         if not oas_query:
             oas_query = {}
-        self.logger.info("SearchOmniHandler.search")
+        self.logger.info("oas_query : {}".format(oas_query))
         
+        return {}
     
     """
     def __init__(self, es_client, logger, config):
