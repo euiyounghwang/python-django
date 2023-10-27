@@ -10,9 +10,12 @@ class Rule(object):
         }
    
         self.payload = {
-            "x": "test_x",
-            "y": "test_y",
-            "start_date": "2022-05-27 12:48:07"
+            "include_basic_aggs": "true",
+            "pit_id": "",
+            "query_string": "video",
+            "size": 20,
+            "sort_order": "DESC",
+            "start_date": "2021 01-01 00:00:00"
         }
         
         self.response_sample = {

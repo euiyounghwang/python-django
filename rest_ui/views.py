@@ -15,12 +15,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Invali
 # Search
 from django.views.decorators.csrf import csrf_exempt
 from rest_api.views import SearchView
-from rest_api.injector import URL_HOST
 from .controller.Rule import Rule
+from .service.SearchHandler import UI_SearchHandler
 import json
 import requests
 
 RequestObject = Rule()
+search_handler = UI_SearchHandler(logger, RequestObject)
 
 def rest_apis(request, page=20):
   '''
@@ -65,35 +66,21 @@ def rest_apis(request, page=20):
 
 @csrf_exempt
 def rest_search_main(request):
-  return render(request, 'search/index.html', None)
+  return render(request, 'search/search.html', None)
 
 @csrf_exempt
 def rest_search_apis(request):
-
+  '''
+  Template
+  '''
+  keyword = ''
   logger.info(request)
-
-  result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
-                         data=json.dumps(RequestObject.get_payload()), 
-                         headers=RequestObject.get_header()
-                         )
-  # logger.info(result.content, type(result.content)) # (<class 'bytes'>,)
-  logger.info(json.dumps(result.json(), indent=2))
-  # logger.info(json.dumps(RequestObject.get_search_result()['hits'], indent=2))
-  
-  hits = []
-  # response_results_json = result.json()
-  response_results_json = RequestObject.get_search_result()
-  for hit in response_results_json['hits']:
-    each_dict = hit
-    # print(hit)
-    if '_source' in each_dict: 
-      each_dict.update({"source" : hit['_source']})
-      del each_dict['_source']
-    hits.append(each_dict)
-    
-  context = {
-    'response': hits,
-    'total' : int(response_results_json['total']['value']),
-    # 'keyword': keyword
-  }
+  if request.GET.get("search"):
+    logger.info(request.GET.get("search"))
+    keyword = request.GET.get("search")
+    # RequestObject.get_payload()['query_string'] = keyword
+  else:
+    logger.warn("It's not processing from SEARCH.HTML")
+   
+  context = search_handler.Search(keyword)
   return render(request, 'search/index.html', context)
