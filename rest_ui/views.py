@@ -13,6 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Invali
 
 # --
 # Search
+from django.views.decorators.csrf import csrf_exempt
 from rest_api.views import SearchView
 from rest_api.injector import URL_HOST
 from .controller.Rule import Rule
@@ -61,6 +62,7 @@ def rest_apis(request, page=20):
   # return render(request, 'search/index.html', context)
 
 
+@csrf_exempt
 def rest_search_apis(request, page=20):
 
   result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
@@ -84,6 +86,7 @@ def rest_search_apis(request, page=20):
     
   context = {
     'response': hits,
-    'total' : int(response_results_json['total']['value'])
+    'total' : int(response_results_json['total']['value']),
+    # 'keyword': keyword
   }
   return render(request, 'search/index.html', context)

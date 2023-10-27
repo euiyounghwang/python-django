@@ -23,9 +23,9 @@
         }
     </style>
 </head>
-<body>
 <div class="main">
     <form method="post">
+        {% csrf_token %}
         <input type="text" name="keyword">
         <input type="submit">
     </form>
@@ -41,5 +41,19 @@
         </div>
     {% endfor %}
 </div>
+<br/>
+ <!--Pagination-->
+ <p align="center">
+     <!-- <a href="?page=1">&laquo; first</a> -->
+    <a href="?page={{ movies.previous_page_number }}">previous</a>
+         
+    <span class="current">
+                Page 
+    </span>
+
+    <a href="?page={{ movies.next_page_number }}">next</a>
+    <!-- <a href="?page={{ movies.paginator.num_pages }}">last &raquo;</a> -->
+</p>
+  <!--end of Pagination-->
 </body>
 </html>
