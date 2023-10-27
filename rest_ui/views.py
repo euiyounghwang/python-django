@@ -62,8 +62,15 @@ def rest_apis(request, page=20):
   # return render(request, 'search/index.html', context)
 
 
+
 @csrf_exempt
-def rest_search_apis(request, page=20):
+def rest_search_main(request):
+  return render(request, 'search/index.html', None)
+
+@csrf_exempt
+def rest_search_apis(request):
+
+  logger.info(request)
 
   result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
                          data=json.dumps(RequestObject.get_payload()), 
