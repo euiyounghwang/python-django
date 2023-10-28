@@ -148,7 +148,7 @@ Django search (Frontend)
 
 ![Alt text](./screenshots/Django-rest_api.png)
 
-- It does show you to retrieve texts
+- It does show you to retrieve texts using Django template in rest_ui app in this project
 
 ![Alt text](./screenshots/Django-rest_ui-search.png)
 
