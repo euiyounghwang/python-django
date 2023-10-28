@@ -7,7 +7,9 @@
     <title>Django Search Results</title>
     <link rel="icon" type="image/x-icon" href="https://help.apiary.io/images/swagger-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loading.css' %}">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <style>
         .main {
             width: 100%;
@@ -103,8 +105,18 @@
       }
     }
     </style>
+    <script type="text/javascript" language="javascript">
+      $(window).load(function() {
+        $(".loader").fadeOut("slow");
+    })
+    $(document).ready(function(){
+        
+      });
+    </script>
 </head>
 <body>
+<!-- loading.imgage -->
+<div class="loader"></div>
 <div class="main">
     <!-- http://localhost:9999/rest_ui/search -->
     <div class="topnav">
