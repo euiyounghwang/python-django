@@ -145,6 +145,9 @@ http://localhost:9999/rest_api/prometheus/metrics
 Django search (Frontend)
 - http://localhost:9999/rest_ui/
 - view in rest_ui app is calling to rest_api (POST: /es/search) for searching from elasticsearch in rest_api app in Django project
+
+![Alt text](./screenshots/Django-rest_api.png)
+
 - It does show you to retrieve texts
 
 ![Alt text](./screenshots/Django-rest_ui-search.png)
