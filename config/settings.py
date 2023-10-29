@@ -119,7 +119,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            # ! New Line
+            # ! add library for templatetags
             'libraries':{
                 'customFilter': 'rest_ui.templatetags.highlight',
             }
