@@ -75,9 +75,9 @@ def rest_search_apis(request):
   '''
   keyword = ''
   logger.info(request)
-  if request.GET.get("search"):
-    logger.info(request.GET.get("search"))
-    keyword = request.GET.get("search")
+  if request.GET.get("keyword"):
+    logger.info(request.GET.get("keyword"))
+    keyword = request.GET.get("keyword")
     # RequestObject.get_payload()['query_string'] = keyword
   else:
     logger.warn("It's not processing from SEARCH.HTML")

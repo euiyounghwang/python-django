@@ -21,7 +21,7 @@ class UI_SearchHandler(object):
                          headers=self.requestobject.get_header()
                          )
         # self.logger.info(result.content, type(result.content)) # (<class 'bytes'>,)
-        self.logger.info(json.dumps(result.json(), indent=2))
+        # self.logger.info(json.dumps(result.json(), indent=2))
         # self.logger.info(json.dumps(RequestObject.get_search_result()['hits'], indent=2))
         
         hits = []

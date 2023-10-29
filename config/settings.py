@@ -119,6 +119,10 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            # ! New Line
+            'libraries':{
+                'customFilter': 'rest_ui.templatetags.highlight',
+            }
         },
     },
 ]

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load highlight %}
 {% load static %}
 {% load humanize %}
 <head>
@@ -27,6 +28,9 @@
             background-color: #7878785e;
             width: 150px;
             padding: 5px
+        }
+        .highlight {
+            background-color: yellow;
         }
    </style>
    <style>
@@ -121,7 +125,7 @@
         <a href="#about">Django-UI</a>
         <div class="search-container">
           <form action="search" method="get">
-            <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="search">
+            <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
             <button type="submit"><i class="fa fa-search"></i></button>
           </form>
         </div>
@@ -133,7 +137,7 @@
             <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
             <p>{{ hit.source.plot | slice:500 }}..</p>
             {% for k, v in hit.highlight.items %}
-            <p>{{ k}} - {{ v | safe}}</p>
+            <p>{{ k}} - {{ v.0 | safe | highlight_yellow:keyword}}</p>
             {% endfor %}        
             <p class="author">Author: {{ hit.source.director }}</p>
             <p class="author"><b>Score: {{ hit.score }}</b></p>
