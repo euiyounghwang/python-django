@@ -16,6 +16,7 @@ logger = create_log()
 
 
 from django.conf import settings
+
 # --
 # Get config from settings
 # ES_HOST = os.getenv("ES_HOST", "http://localhost:9209")
