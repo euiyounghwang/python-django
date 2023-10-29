@@ -72,7 +72,7 @@ class QueryBuilder:
                 "fields": {
                     "*": {
                         "number_of_fragments": 1,
-                        "type": "plain",
+                        "type": "unified",
                         "fragment_size": 150
                     }
                 }
