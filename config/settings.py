@@ -233,6 +233,6 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
         # "KEY_PREFIX": "imdb",
-        # "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
     }
 }

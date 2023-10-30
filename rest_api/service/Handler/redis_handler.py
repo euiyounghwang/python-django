@@ -25,7 +25,7 @@ class Cache:
       reset_all_datas = {}
       results = []
       for k, v in all_datas.items():
-         print('#$%$', k, v)
+         # print('#$%$', k, v)
          # reset_all_datas = v
          delta = datetime.now() - datetime.strptime(all_datas.get(k)['INPUT_DATE'], "%Y-%m-%d %H:%M:%S")
          v.update({"KEY" :  k, "EXPIRED_SECONDS" : float(delta.seconds/60.0)})  
@@ -45,7 +45,7 @@ class Cache:
       
    @retry(ConnectionResetError, delay=0.1, tries=5)
    def get_json_key(self, key):
-      print('$#$', self.client.get(key))
+      # print('$#$', self.client.get(key))
       # return json.dumps(self.client.get(key), ensure_ascii=False)
       return self.client.get(key)
       
@@ -86,7 +86,7 @@ class Cache:
       else:
          all_datas = {k : dict(json.loads(self.get_json_key(k))) for k in self.get_keys_all()}
          
-      self.logger.info('get_transformed_dict - {}'.format(all_datas))
+      self.logger.info('get_transformed_dict - {}'.format(json.dumps(all_datas, indent=2)))
       # Update the gap time for each cache values
       all_datas = self.transform_to_pydantic_with_gap(all_datas)
       return all_datas
