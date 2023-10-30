@@ -18,12 +18,15 @@ from drf_yasg import openapi
 
 from .models import Student, userRank
 from .serializers import StudentSerializer, userRankSerializer
+from django_redis import get_redis_connection
 
 # --
 # Service
 # from .service.Handler.SearchOmniHandler import SearchOmniHandler
-from .injector import SearchOmniHandlerInject, QueryBuilderInject, logger
+from .injector import SearchOmniHandlerInject, QueryBuilderInject, logger, Redis_Cache
 
+
+ITEM_NOT_FOUND = "Item not found for id: {}"
 
 # logger = create_log()
 # SearchOmniObject = SearchOmniHandler(logger=logger)
@@ -49,7 +52,7 @@ class userRankViewSet(viewsets.ModelViewSet):
 
 
 
-class RedisView(APIView):
+class RedisView():
     permission_classes = [permissions.AllowAny]
     
     @swagger_auto_schema(tags=['Redis'], operation_summary="Redis Health GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
@@ -57,11 +60,11 @@ class RedisView(APIView):
     def get_redis_health(request):
         try:
             logger.info("ES get_redis_health")
-            from django_redis import get_redis_connection
             logger.info("Redis Connection : {}".format(get_redis_connection("default").flushall()))
             return Response({'message' : 'Get: Redis Connection - {}'.format(get_redis_connection("default").flushall())})
         except Exception as e:
             logger.error(e)
+            return JsonResponse({'message' : str(e)}, status=500)
             
     
     @swagger_auto_schema(tags=['Redis'], operation_summary="Redis GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
@@ -69,15 +72,36 @@ class RedisView(APIView):
     def get_redis_search(request):
         try:
             logger.info("ES get_redis_search")
-            from django_redis import get_redis_connection
-            print(get_redis_connection("default").flushall())
-            return Response({'message' : 'Get: hello, get_redus_search world!'})
+            response = Redis_Cache.get_transformed_dict()
+            response_json = {'Total' : len(response), 'Results': response}
+            return Response({'message' : response_json})
         except Exception as e:
             logger.error(e)
+            return JsonResponse({'message' : str(e)}, status=500)
+            
+            
+    key_param = openapi.Parameter('key', openapi.IN_QUERY, description="field id", type=openapi.TYPE_STRING)
+    value_param = openapi.Parameter('value', openapi.IN_QUERY, description="field value", type=openapi.TYPE_STRING)
+    @swagger_auto_schema(tags=['Redis'], operation_summary="Redis GET", method='GET', manual_parameters=[key_param, value_param], responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_redis_post(request, key=None, value=None):
+        try:
+            k = request.GET.get("key")
+            v = request.GET.get("value")
+            if not k or not v:
+                return JsonResponse({'message' : 'Please add key and value'}, status=404)
+            logger.info("ES get_redis_post - {}, {}".format(k, v))
+            Redis_Cache.set_json_key(k, v)
+            response_json = {k : json.loads(str(Redis_Cache.get_key(k)).replace("b'",'').replace("}'",'}'))}
+            logger.info('response - {}'.format(json.dumps(response_json, indent=2)))
+            return JsonResponse({'message' : response_json})
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'message' : str(e)}, status=500)
 
 
 
-class SearchView(APIView):
+class SearchView():
     permission_classes = [permissions.AllowAny]
  
     @swagger_auto_schema(
@@ -120,12 +144,13 @@ class SearchView(APIView):
             
             
     @api_view(["GET",])
-    def get_search(request):
+    def get_search():
         try:
             logger.info("ES get_search")
             return Response({'message' : 'Get: hello, search world!'})
         except Exception as e:
             logger.error(e)
+            return JsonResponse({'message' : str(e)}, status=500)
                 
             
             

@@ -48,6 +48,7 @@ urlpatterns = [
     # redis search
     path('redis_health', RedisView.get_redis_health, name='Redis'),
     path('redis', RedisView.get_redis_search, name='Redis'),
+    path('redis_set', RedisView.get_redis_post, name='Redis'),
     # --
     
     # --
