@@ -219,3 +219,20 @@ LOGGING = {
 # Custom Settings
 GLOBAL_ES_HOST = 'http://localhost:9209'
 GLOBAL_HOST_URL = 'http://localhost:9999'
+GLOBAL_RADIS_HOST = "redis://{}:{}/{}".format(
+    os.getenv("REDIS_HOST", "localhost"), 
+    os.getenv("REDIS_PORT", 6379),
+    os.getenv("REDIS_DATABASE", 0),
+)
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': str(GLOBAL_RADIS_HOST),  # Change this according to your Redis server's URL & port
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        # "KEY_PREFIX": "imdb",
+        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+    }
+}

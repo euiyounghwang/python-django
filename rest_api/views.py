@@ -49,6 +49,34 @@ class userRankViewSet(viewsets.ModelViewSet):
 
 
 
+class RedisView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    @swagger_auto_schema(tags=['Redis'], operation_summary="Redis Health GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_redis_health(request):
+        try:
+            logger.info("ES get_redis_health")
+            from django_redis import get_redis_connection
+            logger.info("Redis Connection : {}".format(get_redis_connection("default").flushall()))
+            return Response({'message' : 'Get: Redis Connection - {}'.format(get_redis_connection("default").flushall())})
+        except Exception as e:
+            logger.error(e)
+            
+    
+    @swagger_auto_schema(tags=['Redis'], operation_summary="Redis GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
+    @api_view(["GET",])
+    def get_redis_search(request):
+        try:
+            logger.info("ES get_redis_search")
+            from django_redis import get_redis_connection
+            print(get_redis_connection("default").flushall())
+            return Response({'message' : 'Get: hello, get_redus_search world!'})
+        except Exception as e:
+            logger.error(e)
+
+
+
 class SearchView(APIView):
     permission_classes = [permissions.AllowAny]
  
