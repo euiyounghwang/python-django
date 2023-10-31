@@ -4,6 +4,10 @@ from elasticsearch.client import Elasticsearch, IndicesClient
 import json
 
 
+@pytest.mark.skip(reason="no way of currently testing this")
+def test_search_skip():
+    assert 1 != 1
+    
 
 # @pytest.fixture(scope="session")
 def test_elasticsearch(mock_es_client):
