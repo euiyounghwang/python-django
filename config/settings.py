@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from .settings_dev import *
+from .settings_prod import *
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -238,3 +240,4 @@ LOGGING = {
 #         "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
 #     }
 # }
+
