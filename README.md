@@ -202,7 +202,7 @@ systemctl status django-gunicorn.service
 ● django-gunicorn.service - 
 ```
 
-Docker Build & Run/Pytest
+Docker Build & Run/Pytest : Docker build for running service & pytest through docker-compose.yml
 
 ![Alt text](./screenshots/Django-Docker-Compose-Build.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Run.png)
