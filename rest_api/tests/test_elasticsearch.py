@@ -1,8 +1,10 @@
 
 import pytest
 from elasticsearch.client import Elasticsearch, IndicesClient
+from ..service.Utils.ES_Utils import transform_trim_string
 import json
 
+''' pytest -sv rest_api/tests/test_elasticsearch.py '''
 
 @pytest.mark.skip(reason="no way of currently testing this")
 def test_search_skip():
@@ -60,7 +62,7 @@ def test_indics_analyzer_elasticsearch(mock_es_client):
         index="test_ngram_v1",
         body={
             "analyzer": "autocomplete",
-            "text": "The quick",
+            "text": transform_trim_string("The quick"),
         }
     )
     
