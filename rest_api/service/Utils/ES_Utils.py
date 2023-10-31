@@ -37,7 +37,6 @@ def json_value_to_transform_trim(raw_json):
                     print("%%%%", k, v)
                     d[k] = transform_trim_string(v)
                 else:
-                #     print('########', v)
                     get_recursive_nested_all(v)
         return d
 
