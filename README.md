@@ -201,3 +201,9 @@ systemctl start django-gunicorn
 systemctl status django-gunicorn.service
 ● django-gunicorn.service - 
 ```
+
+Docker Build & Run/Pytest
+
+![Alt text](./screenshots/Django-Docker-Compose-Build.png)
+![Alt text](./screenshots/Django-Docker-Compose-Run.png
+![Alt text](./screenshots/Django-Docker-Compose-Pytest.png
