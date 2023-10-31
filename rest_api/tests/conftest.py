@@ -12,3 +12,8 @@ def mock_es_client():
 def mock_query_builder():
     return QueryBuilderInject
 
+
+@pytest.fixture
+def mock_client():
+   from rest_framework.test import APIClient
+   return APIClient()

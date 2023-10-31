@@ -78,7 +78,7 @@ class RestapiView(APIView):
         try:
             obj_id = request.GET.get('obj_id')
             logger.info('request : {}'.format(obj_id))
-            return Response({'message' : 'Get: hello, world!'})
+            return Response({'message' : 'Get: hello, world!, value - {}'.format(obj_id)})
         except Exception as e:
             logger.error(e)
             

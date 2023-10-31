@@ -9,6 +9,8 @@ def test_build_skip():
     assert 1 != 1
 
 
+# `Parametrize` is a builtin mark and one of the killer features of pytest. 
+# With this mark, you can perform multiple calls to the same test function.
 @pytest.mark.parametrize(
     "_term",
     [[1, 2, 3, 4, 5, 6]]
