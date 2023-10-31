@@ -207,3 +207,27 @@ Docker Build & Run/Pytest
 ![Alt text](./screenshots/Django-Docker-Compose-Build.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Run.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Pytest.png)
+
+Pytest
+```bash
+platform darwin -- Python 3.9.7, pytest-7.4.3, pluggy-1.3.0 -- /Users/euiyoung.hwang/ES/Python_Workspace/python-django/.venv/bin/python
+cachedir: .pytest_cache
+django: settings: config.settings_dev (from ini)
+rootdir: /Users/euiyoung.hwang/ES/Python_Workspace/python-django/rest_api/tests
+configfile: pytest.ini
+plugins: cov-4.1.0, django-4.5.2
+collected 12 items                                                                                                                         
+
+rest_api/tests/test_build_query.py::test_build_skip SKIPPED (no way of currently testing this)                                       [  8%]
+rest_api/tests/test_build_query.py::test_build_terms[_term0] PASSED                                                                  [ 16%]
+rest_api/tests/test_build_query.py::test_build_terms_batch PASSED                                                                    [ 25%]
+rest_api/tests/test_elasticsearch.py::test_search_skip SKIPPED (no way of currently testing this)                                    [ 33%]
+rest_api/tests/test_elasticsearch.py::test_elasticsearch PASSED                                                                      [ 41%]
+rest_api/tests/test_elasticsearch.py::test_indics_analyzer_elasticsearch PASSED                                                      [ 50%]
+rest_api/tests/test_rest_api.py::test_api_skip SKIPPED (no way of currently testing this)                                            [ 58%]
+rest_api/tests/test_rest_api.py::test_api_test_swagger PASSED                                                                        [ 66%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[1] PASSED                                                                    [ 75%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[2] PASSED                                                                    [ 83%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[3] PASSED                                                                    [ 91%]
+rest_api/tests/test_rest_api.py::test_api_es_search_swagger PASSED                                                                   [100%]
+```
