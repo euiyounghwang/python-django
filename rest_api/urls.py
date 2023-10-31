@@ -11,7 +11,7 @@ from rest_framework import permissions
 
 from .views import (
     StudentViewSet, userRankViewSet, SearchView,
-    userRankView,
+    userRankView, RedisView
     # rest_apis
 )
 
@@ -44,6 +44,12 @@ urlpatterns = [
     path('es/search', SearchView.get_es_search, name='Search'),
     # --
     
+    # --
+    # redis search
+    path('redis_health', RedisView.get_redis_health, name='Redis'),
+    path('redis', RedisView.get_redis_search, name='Redis'),
+    path('redis_set', RedisView.get_redis_post, name='Redis'),
+    # --
     
     # --
     # Render Template using HTTPResponse to the browser)
@@ -59,9 +65,10 @@ urlpatterns = [
     
     # --
     # Model && Custom API
-    path('userRank/', userRankView.get_api, name='userRank'),
+    path('userRank', userRankView.get_api, name='userRank'),
     path('userRank/<str:pk>', userRankView.get_api, name='userRank'),
-    path('userRank/<str:id>', userRankView.delete_params_api, name='userRank'),
+    path('userRank/<str:username>/', userRankView.delete_params_api, name='userRank'),
+    path('userRank/', userRankView.post_params_api, name='userRank'),
     # --
     
     path('users', RestapiView.as_view(), name='rest_api'),

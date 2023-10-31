@@ -1,0 +1,23 @@
+<html>
+ {% load static %}
+<head>
+<link rel="stylesheet" href="{% static 'main.css' %}">
+</head>  
+<body>
+
+<h1>Members</h1>
+  
+<ul>
+  {% for x in students %}
+    <li>{{ x.id }} {{ x.name }}</li>
+  {% endfor %}
+</ul>
+
+<ul>
+    {% for x in copystudents %}
+      <li>{{ x.id }} {{ x.name }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

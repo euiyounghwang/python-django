@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from .settings_dev import *
+from .settings_prod import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.humanize',
     #--
     # Cross Domain (poetry add django-cors-headers)
     'corsheaders',
@@ -72,8 +79,9 @@ MIDDLEWARE = [
     # --
     # Django Prometheus
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
-    "django_prometheus.middleware.PrometheusAfterMiddleware"
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
     # --
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # --
@@ -117,6 +125,10 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            # ! add library for templatetags
+            'libraries':{
+                'customFilter': 'rest_ui.templatetags.highlight',
+            }
         },
     },
 ]
@@ -135,16 +147,17 @@ DATABASES = {
     }
 }
 """
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # database name
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '15432',
-    }
-}
+#  str(os.getenv("REDIS_HOST", "localhost"))
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',  # database name
+#         'USER': 'postgres',
+#         'PASSWORD': '1234',
+#         'HOST': os.getenv("REDIS_HOST", "localhost"),
+#         'PORT': '15432',
+#     }
+# }
 
 
 # Password validation
@@ -211,4 +224,20 @@ LOGGING = {
 
 # --
 # Custom Settings
-GLOBAL_ES_HOST = 'http://localhost:9209'
+
+# GLOBAL_ES_HOST = 'http://localhost:9209'
+# GLOBAL_HOST_URL = 'http://localhost:9999'
+
+# GLOBAL_REDIS_URL = "redis://{}:{}/{}".format(os.getenv("REDIS_HOST", "localhost"), os.getenv("REDIS_PORT", 6379),os.getenv("REDIS_DATABASE", 0)),
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION':  GLOBAL_REDIS_URL, # Change this according to your Redis server's URL & port
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         },
+#         # "KEY_PREFIX": "imdb",
+#         "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+#     }
+# }
+

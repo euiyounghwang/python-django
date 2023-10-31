@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
       target: runtime
     ports:
-      - 9999:9999
+      - 9991:9999
     volumes:
       - ${PROJECTS_DIR}/python-django:/app/FN-Django-Services
     restart: unless-stopped
@@ -20,8 +20,8 @@ services:
       - ES_HOST=http://host.docker.internal:9209
       - RABBIT_HOST=host.docker.internal
       - PUBLISH_QUEUE=fastapi_publish_queue
-      - RADIS_HOST=host.docker.internal
-      - RADIS_PORT=6379
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=6379
       - REDIS_DATABASE=0
     networks:
       - bridge
@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
       target: test
     ports:
-      - 9998:9999
+      - 9992:9999
     volumes:
       - ${PROJECTS_DIR}/python-django:/app/FN-Django-Services
     environment:
@@ -42,8 +42,8 @@ services:
       - ES_HOST=http://host.docker.internal:9209
       - RABBIT_HOST=host.docker.internal
       - PUBLISH_QUEUE=fastapi_publish_queue
-      - RADIS_HOST=host.docker.internal
-      - RADIS_PORT=6379
+      - REDIS_HOST=host.docker.internal
+      - REDIS_PORT=6379
       - REDIS_DATABASE=0
     networks:
       - bridge

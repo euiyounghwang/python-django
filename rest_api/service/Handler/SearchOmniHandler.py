@@ -3,11 +3,14 @@ import json
 from elasticsearch import TransportError
 import elasticsearch.exceptions
 
+
 class SearchOmniHandler(object):
     
     def __init__(self, es_client, logger):
         self.es_client = es_client
         self.logger = logger
+        self.OMNI_INDEX_ALIAS = 'omnisearch_search'
+        self.search_after = None
         
         # --
         # Test ES connection
@@ -21,34 +24,19 @@ class SearchOmniHandler(object):
         self.logger.info(json.dumps(self.es_client.info(), indent=2))
     
     
-    def search(self, oas_query=None):
+    def search(self, query_build, oas_query=None):
         if not oas_query:
             oas_query = {}
-        self.logger.info("SearchOmniHandler.search")
+        self.logger.info("oas_query : {}".format(oas_query))
         
-    
-    """
-    def __init__(self, es_client, logger, config):
-        self.es_client = es_client
-        self.logger = logger
-        self.config = config
-        self.OMNI_INDEX_ALIAS = self.config["es"]["index"]["alias"]
-        self.search_after = None
-        
-        
-    async def search(self, query_builder, oas_query=None):
-        ''' Search with QuerBuilder '''
-        if not oas_query:
-            oas_query = {}
-
         if not oas_query.get('pit_id'):
             resp = self.es_client.open_point_in_time(index=self.OMNI_INDEX_ALIAS, keep_alive='1m')
             pit_id = resp['id']
             self.search_after = None
         else:
             pit_id = oas_query.get('pit_id')
-
-        es_query = query_builder.build_query(oas_query, pit_id, self.search_after)
+        
+        es_query = query_build.build_query(oas_query, pit_id, self.search_after)
         self.logger.info('query_builder_build_query:oas_query - {}'.format(json.dumps(es_query, indent=2)))
 
         try:
@@ -68,4 +56,4 @@ class SearchOmniHandler(object):
         es_hits['aggregations'] = es_result['aggregations']
 
         return es_hits
-    """
+    
