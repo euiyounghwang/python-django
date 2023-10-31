@@ -208,7 +208,7 @@ Docker Build & Run/Pytest
 ![Alt text](./screenshots/Django-Docker-Compose-Run.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Pytest.png)
 
-Pytest
+Pytest (<i>poetry run pytest -v rest_api/tests</i>)
 ```bash
 platform darwin -- Python 3.9.7, pytest-7.4.3, pluggy-1.3.0 -- /Users/euiyoung.hwang/ES/Python_Workspace/python-django/.venv/bin/python
 cachedir: .pytest_cache
