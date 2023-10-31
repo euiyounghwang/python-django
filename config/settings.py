@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,13 +145,14 @@ DATABASES = {
     }
 }
 """
+#  str(os.getenv("REDIS_HOST", "localhost"))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',  # database name
         'USER': 'postgres',
         'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'HOST': os.getenv("REDIS_HOST", "localhost"),
         'PORT': '15432',
     }
 }
@@ -217,18 +222,15 @@ LOGGING = {
 
 # --
 # Custom Settings
+
 GLOBAL_ES_HOST = 'http://localhost:9209'
 GLOBAL_HOST_URL = 'http://localhost:9999'
-GLOBAL_RADIS_HOST = "redis://{}:{}/{}".format(
-    os.getenv("REDIS_HOST", "localhost"), 
-    os.getenv("REDIS_PORT", 6379),
-    os.getenv("REDIS_DATABASE", 0),
-)
 
+GLOBAL_REDIS_URL = "redis://{}:{}/{}".format(os.getenv("REDIS_HOST", "localhost"), os.getenv("REDIS_PORT", 6379),os.getenv("REDIS_DATABASE", 0)),
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': str(GLOBAL_RADIS_HOST),  # Change this according to your Redis server's URL & port
+        'LOCATION':  GLOBAL_REDIS_URL, # Change this according to your Redis server's URL & port
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -236,3 +238,4 @@ CACHES = {
         "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
     }
 }
+print('CACHES - ', CACHES)

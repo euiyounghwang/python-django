@@ -27,7 +27,7 @@ WORKDIR /app
 COPY poetry.lock pyproject.toml ./
 
 RUN /bin/bash -c 'source $POETRY_VENV/bin/activate && \
-    poetry install'
+    poetry install --no-root'
 
 
 
@@ -39,3 +39,13 @@ COPY --from=environment /app .
 COPY . FN-Django-Services
 
 ENTRYPOINT ["/app/FN-Django-Services/docker-run-entrypoints.sh"]
+
+
+FROM --platform=linux/amd64 python:3.9.7 as test
+
+WORKDIR /app
+#COPY --from=indexing_environment $POETRY_VENV $POETRY_VENV
+COPY --from=environment /app .
+COPY . FN-Django-Services
+
+ENTRYPOINT ["/app/FN-Django-Services/docker-run-tests.sh"]

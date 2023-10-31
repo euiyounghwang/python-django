@@ -27,8 +27,6 @@ URL_HOST = os.getenv("ES_HOST", getattr(settings, 'GLOBAL_HOST_URL'))
 
 # --
 # Redis
-RedisHanlderInject = os.getenv("_HOST", getattr(settings, 'GLOBAL_ES_HOST'))
-
 from django.core.cache import cache
 Redis_Cache = Cache(logger, cache)
 # --

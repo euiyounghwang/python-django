@@ -14,4 +14,5 @@ set -e
 source /app/poetry-venv/bin/activate
 cd /app/FN-Django-Services
 # python -m py.test -v tests --disable-warnings
-py.test -v tests --disable-warnings
+# py.test -v tests --disable-warnings
+poetry run pytest -v rest_api/tests
