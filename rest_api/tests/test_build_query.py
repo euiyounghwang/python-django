@@ -10,13 +10,15 @@ def test_build_skip():
 
 
 @pytest.mark.parametrize(
-    "seq",
+    "_term",
     [[1, 2, 3, 4, 5, 6]]
 )
-def test_build_terms(mock_query_builder, seq):
+def test_build_terms(mock_query_builder, _term):
+    ''' terms query build test '''
     assert mock_query_builder is not None
     mock_query_handler = mock_query_builder
-    mock_ids_filter = seq
+    
+    mock_ids_filter = _term
     
     response_ids_filter_query = mock_query_handler.build_terms_filters_batch(_terms=mock_ids_filter, max_terms_count=5)
     assert response_ids_filter_query is not None
