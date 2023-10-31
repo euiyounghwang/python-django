@@ -11,7 +11,7 @@ source .venv/bin/activate
 
 # poetry run python manage.py migrate 
 # -- runserver is for dev env
-poetry run python manage.py runserver 9999
+poetry run python manage.py runserver 9999 --settings=config.settings-dev
 
 # -- NginX + Gunicorn for Prod
 # https://wikidocs.net/6601
