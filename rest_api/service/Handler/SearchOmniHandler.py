@@ -30,6 +30,7 @@ class SearchOmniHandler(object):
         self.logger.info("oas_query : {}".format(oas_query))
         
         if not oas_query.get('pit_id'):
+            self.logger.warn("Search but It's first time to call with pit")
             resp = self.es_client.open_point_in_time(index=self.OMNI_INDEX_ALIAS, keep_alive='1m')
             pit_id = resp['id']
             self.search_after = None
@@ -48,6 +49,7 @@ class SearchOmniHandler(object):
             raise ContinuationTokenException(
                 "Continuation token has expired. Please set the token to None/null and restart the pagination.")
 
+        # self.logger.info('query_builder_build_query:response - {}'.format(json.dumps(es_result, indent=2)))
         es_hits = es_result["hits"]
         results = [es_hit for es_hit in es_hits["hits"]]
 

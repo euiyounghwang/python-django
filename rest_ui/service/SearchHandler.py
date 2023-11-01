@@ -11,8 +11,13 @@ class UI_SearchHandler(object):
     def __init__(self, logger, RequestObject):
         self.requestobject = RequestObject
         self.logger = logger
-    
-    def Search(self, keyword, pit):
+        
+            
+    def Search(self, keyword, pit, direction=None):
+        ''' rest_ui search from the template '''
+        if not keyword:
+            return
+        
         # --
         self.logger.warn("UI_SearchHandler: keyword - {}, pit - {} ".format(keyword, pit))
         self.requestobject.get_payload()['query_string'] = keyword

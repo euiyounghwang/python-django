@@ -83,10 +83,10 @@ class QueryBuilder:
 
     def add_pagination(self, search_after=None):
         if search_after is not None:
-            self.logger.warn('Not none for search after')
+            self.logger.warn('add_pagination - Not none for search after')
             self.es_query['search_after'] = search_after
         else:
-            self.logger.warn('None for search after')
+            self.logger.warn('add_pagination - None for search after')
 
     def add_aggregations(self, oas_query=None):
         if oas_query.get("include_basic_aggs"):

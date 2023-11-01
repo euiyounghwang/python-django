@@ -81,9 +81,11 @@ def rest_search_apis(request):
     # RequestObject.get_payload()['query_string'] = keyword
   else:
     logger.warn("It's not processing from SEARCH.HTML")
+    return render(request, 'search/search.html', None)
     
   pit = request.POST.get("pit")
+  direction = request.POST.get("direction")
    
-  context = search_handler.Search(keyword, pit)
+  context = search_handler.Search(keyword, pit, direction)
   # logger.info('context : {}'.format(context))
   return render(request, 'search/index.html', context)
