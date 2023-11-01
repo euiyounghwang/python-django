@@ -134,9 +134,7 @@ class SearchView():
         try:
             # print(request.data)
             request_json = request.data
-            # tutorial_data = JSONParser().parse(request)
-            # print('request : {}'.format(json.dumps(request_json, indent=2)))
-            logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
+            # logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
             response = SearchOmniHandlerInject.search(QueryBuilderInject, request_json)
             return JsonResponse({'message' : response}, status=200)
         except Exception as e:
