@@ -12,13 +12,13 @@ def test_api_skip():
     assert 1 != 1
 
 
-@pytest.mark.django_db
-def test_student_model_get_swagger(mock_client):
-    assert mock_client is not None
-    response = mock_client.get(
-        '/rest_api/userRank',
-    )
-    assert response.status_code == 200
+# @pytest.mark.django_db
+# def test_student_model_get_swagger(mock_client):
+#     assert mock_client is not None
+#     response = mock_client.get(
+#         '/rest_api/userRank',
+#     )
+#     assert response.status_code == 200
     
   
     

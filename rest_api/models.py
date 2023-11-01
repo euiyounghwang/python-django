@@ -10,7 +10,7 @@ class userRank(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'userank'
+        db_table = 'userrank'
         
     def __str__(self) -> str:
         return f"{self.username, self.deposit, self.earning_rate}"

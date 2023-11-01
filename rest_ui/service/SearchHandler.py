@@ -12,9 +12,11 @@ class UI_SearchHandler(object):
         self.requestobject = RequestObject
         self.logger = logger
     
-    def Search(self, keyword):
+    def Search(self, keyword, pit):
         # --
+        self.logger.warn("UI_SearchHandler: keyword - {}, pit - {} ".format(keyword, pit))
         self.requestobject.get_payload()['query_string'] = keyword
+        self.requestobject.get_payload()['pit_id'] = pit
   
         result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
                          data=json.dumps(self.requestobject.get_payload()), 
@@ -35,7 +37,8 @@ class UI_SearchHandler(object):
         context = {
             'response': hits,
             'total' : int(response_results_json['message']['total']['value']),
-            'keyword': keyword
+            'keyword': keyword,
+            'pit_token' : response_results_json['message']['pit']
         }
         # self.logger.info('UI_SearchHandler Results - {}'.format(json.dumps(context, indent=2)))
         return context

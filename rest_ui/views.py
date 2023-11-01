@@ -75,13 +75,15 @@ def rest_search_apis(request):
   '''
   keyword = ''
   logger.info(request)
-  if request.GET.get("keyword"):
-    logger.info(request.GET.get("keyword"))
-    keyword = request.GET.get("keyword")
+  if request.POST.get("keyword"):
+    logger.info(request.POST.get("keyword"))
+    keyword = request.POST.get("keyword")
     # RequestObject.get_payload()['query_string'] = keyword
   else:
     logger.warn("It's not processing from SEARCH.HTML")
+    
+  pit = request.POST.get("pit")
    
-  context = search_handler.Search(keyword)
+  context = search_handler.Search(keyword, pit)
   # logger.info('context : {}'.format(context))
   return render(request, 'search/index.html', context)

@@ -124,8 +124,9 @@
         <a class="active" href=".">Home</a>
         <a href="#about">Django-UI</a>
         <div class="search-container">
-          <form action="search" method="get">
+          <form action="search" method="post">
             <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
+            <input type="hidden" value="{% if pit_token %}{{ pit_token }}{%endif%}" name="pit">
             <button type="submit"><i class="fa fa-search"></i></button>
           </form>
         </div>
