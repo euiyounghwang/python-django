@@ -24,6 +24,7 @@ from django_redis import get_redis_connection
 # Service
 # from .service.Handler.SearchOmniHandler import SearchOmniHandler
 from .injector import SearchOmniHandlerInject, QueryBuilderInject, logger, Redis_Cache
+from rest_framework.generics import GenericAPIView
 
 
 ITEM_NOT_FOUND = "Item not found for id: {}"
@@ -157,10 +158,12 @@ class SearchView():
 # --
 # REST API : CRUD Custom URL Patterns to this class
 # https://walkingplow.tistory.com/25
-class userRankView(APIView):
+class userRankView(GenericAPIView):
     """
     Custom REST API GET, PUT, DELETE, POST
     """
+    
+    serializer_class = userRankSerializer
 
     @swagger_auto_schema(tags=['userank'], operation_summary="userank GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
     @api_view(["GET",])
