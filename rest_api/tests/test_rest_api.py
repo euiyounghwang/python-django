@@ -7,10 +7,19 @@ from ..injector import logger
 
 ''' pytest -sv rest_api/tests/test_rest_api.py '''
 
-
 @pytest.mark.skip(reason="no way of currently testing this")
 def test_api_skip():
     assert 1 != 1
+
+
+# @pytest.mark.django_db
+# def test_student_model_get_swagger(mock_client):
+#     assert mock_client is not None
+#     response = mock_client.get(
+#         '/rest_api/userRank',
+#     )
+#     assert response.status_code == 200
+    
     
     
 def test_api_test_swagger(mock_client):
