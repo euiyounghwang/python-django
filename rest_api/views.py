@@ -16,7 +16,7 @@ from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_STRING, TYPE_ARRAY
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Student, userRank
+from .models import Student, userRank, Ip
 from .serializers import StudentSerializer, userRankSerializer
 from django_redis import get_redis_connection
 

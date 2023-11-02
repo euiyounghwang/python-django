@@ -9,7 +9,7 @@ class userRank(models.Model):
     # age = models.PositiveIntegerField(null=True)
     
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'userrank'
         
     def __str__(self) -> str:
@@ -34,7 +34,7 @@ class Student(models.Model):
     # human = models.ForeignKey('userRank', on_delete = models.CASCADE)
     
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'student'
 
     def __str__(self) -> str:
@@ -44,3 +44,41 @@ class Student(models.Model):
     def json(self):
         return {'name':str(self.name)}
 
+
+
+class Sessions(models.Model):
+    sessionId = models.AutoField(primary_key=True)
+    
+    class Meta:
+        # managed = False
+        db_table = 'sessions'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.sessionId}"
+
+
+class Ip(models.Model):
+    ipId = models.AutoField(primary_key=True)
+    
+    class Meta:
+        # managed = False
+        db_table = 'ip'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.ipId}"
+
+
+class Affiliation(models.Model):
+    affiliationId = models.AutoField(primary_key=True)
+    ip = models.ForeignKey("Ip", null=False, db_column="ipId", on_delete=models.CASCADE)
+    session = models.ForeignKey("Sessions", null=False, db_column="sessionId", on_delete=models.CASCADE)
+    
+    class Meta:
+        # managed = False
+        db_table = 'affiliation'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.affiliationId, self.ip, self.session}"
