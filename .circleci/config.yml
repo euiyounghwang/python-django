@@ -94,7 +94,7 @@ jobs:
           command: |
             conda/bin/conda create --yes --quiet --name python-django python=3.9
             source conda/bin/activate python-django && pip install poetry==$POETRY_VERSION
-            poetry install
+            poetry install --no-root
 
       - run:
           name: tests
