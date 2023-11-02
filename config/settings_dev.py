@@ -22,7 +22,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': os.getenv("REDIS_HOST", "localhost"),
-        'PORT': '15432',
+        'PORT': '5432',
     }
 }
 
