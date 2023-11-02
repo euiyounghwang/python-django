@@ -10,5 +10,6 @@ cd $SCRIPTDIR
 source .venv/bin/activate
 
 # poetry run pytest -v rest_api/tests --junitxml=test-reports/junit/pytest.xml --cov-report html --cov
-poetry run pytest -v rest_api/tests --cov-report term-missing --cov
+poetry run pytest -v rest_api/tests --cov-report term-missing --cov html
+# poetry run pytest -v rest_api/tests --cov-report term-missing --cov
 # pytest -v rest_api/tests
