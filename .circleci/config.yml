@@ -88,13 +88,6 @@ jobs:
           paths:
             - ./.poetry
             
-      - restore_cache:
-          name: "[python] Restore the dependencies cache"
-          keys:
-            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}-{{ .Branch }}-{{ checksum "./poetry.lock" }}
-            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}-{{ .Branch }}
-            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}
-    
       - run:
           name: Install Dependencies
           command: |
