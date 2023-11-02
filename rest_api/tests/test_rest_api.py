@@ -95,7 +95,7 @@ def test_api_users_swagger(mock_client, obj_id):
     }
 
 
-@pytest.mark.skip(reason="Need to create index 'omnisearch_search'")
+# @pytest.mark.skip(reason="Need to create index 'test_omnisearch_v1'")
 def test_api_es_search_swagger(mock_client):
     ''' API call '''
     assert mock_client is not None

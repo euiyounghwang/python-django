@@ -58,6 +58,8 @@ class QueryBuilder:
                     "query": oas_query.get('query_string')
                 }
             }
+        return self.query_string
+
 
     def add_highlighting(self):
         self.highlight_clauses = {
@@ -87,6 +89,8 @@ class QueryBuilder:
             self.es_query['search_after'] = search_after
         else:
             self.logger.warn('add_pagination - None for search after')
+            
+        return search_after
 
     def add_aggregations(self, oas_query=None):
         if oas_query.get("include_basic_aggs"):
@@ -125,8 +129,7 @@ class QueryBuilder:
 
         # self.logger.info('QueryBuilder:oas_query_params - {}'.format(oas_query))
 
-        self.transform_query_string(oas_query)
-        self.must_clauses = [self.query_string]
+        self.must_clauses = [self.transform_query_string(oas_query)]
         self.filter_clauses = [{
             "bool": {
                 "must": [

@@ -108,4 +108,34 @@ def test_indics_analyzer_elasticsearch(mock_es_client):
         ]
     }
 
- 
+
+def test_omnisearch_v1(mock_es_client):
+    assert mock_es_client is not None
+
+    es = mock_es_client
+
+    # print(response)
+    # assert response.status == 404
+
+    response = es.get(index="test_omnisearch_v1", id=111)
+    response = es.get(index="test_omnisearch_v1", id=222)
+    print(response)
+    assert response is not None
+    assert '_source' in response and response['_source']['title'] == 'Cryptocurrency Regulations Act 222'
+
+    query = {
+        "query": {
+            "match": {
+                "title": "Cryptocurrency"
+            }
+        }
+    }
+
+    response = es.search(index="test_omnisearch_v1", body=query)
+    assert response is not None
+    assert response['hits']['total']['value'] > 0
+    # print(response)
+    # print("Got %d Hits:" % response['hits']['total']['value'])
+    for hit in response['hits']['hits']:
+        print(hit["_source"])
+        assert hit["_source"] is not None

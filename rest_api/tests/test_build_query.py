@@ -14,6 +14,62 @@ def test_build_skip():
     assert 1 != 1
 
 
+def test_query_string_clause(mock_query_builder):
+    ''' query_string build '''
+    assert mock_query_builder is not None
+    mock_query_handler = mock_query_builder
+    
+    payload = {
+        "include_basic_aggs": True,
+        "pit_id": "",
+        "query_string": "Cryptocurrency ",
+        "size": 20,
+        "sort_order": "DESC",
+        "start_date": "2021 01-01 00:00:00"
+    }
+    
+    query_string_clause = mock_query_handler.transform_query_string(payload)
+    assert query_string_clause == {
+        "query_string": {
+            "fields": [
+              "*"
+            ],
+            "default_operator": "AND",
+            "analyzer": "standard",
+            "query": "Cryptocurrency "
+          }
+    }
+    
+    # --
+    # trim all values in json
+    # --
+    assert json_value_to_transform_trim(query_string_clause) == {
+        "query_string": {
+            "fields": [
+              "*"
+            ],
+            "default_operator": "AND",
+            "analyzer": "standard",
+            "query": "Cryptocurrency"
+          }
+    }
+
+
+def test_pagination_clause(mock_query_builder):
+    ''' search_after with pit build '''
+    assert mock_query_builder is not None
+    mock_query_handler = mock_query_builder
+    
+    search_after_clause = mock_query_builder.add_pagination(search_after=None)
+    assert search_after_clause == None
+    
+    # --
+    # Paging with pit
+    sort_values = [5.5595245, "Jai Prakash", 4294970921]
+    search_after_clause = mock_query_builder.add_pagination(search_after=sort_values)
+    assert search_after_clause == sort_values
+
+
 def test_transform_trim():
     test_query = {
         "query": {
