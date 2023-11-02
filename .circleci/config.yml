@@ -103,30 +103,30 @@ jobs:
             poetry run python -m py.test -v rest_api/tests --disable-warnings
    
    
-#   publish-latest:
+  publish-latest:
 
-#     environment:
-#       IMAGE_NAME: euiyoung/fn-search-vector-api
+    environment:
+      IMAGE_NAME: euiyoung/fn-django-search-api
 
-#     docker:
-#       - image: circleci/buildpack-deps:stretch
+    docker:
+      - image: circleci/buildpack-deps:stretch
 
-#     steps:
-#       - checkout
-#       - setup_remote_docker:
-#           docker_layer_caching: true
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
 
-#       - run:
-#           name: Build Docker image
-#           command:
-# #            docker build -t $IMAGE_NM:es .
-#             docker build -t $IMAGE_NAME:es .
+      - run:
+          name: Build Docker image
+          command:
+#            docker build -t $IMAGE_NM:es .
+            docker build -t $IMAGE_NAME:es .
 
-#       - run:
-#           name: Publish Docker Image to Docker Hub
-#           command: |
-#             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-#             docker push $IMAGE_NAME:es
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:es
 
 
 workflows:
