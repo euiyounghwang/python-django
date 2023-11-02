@@ -74,20 +74,20 @@ jobs:
             fi
     
       
-      - run:
-          name: "[python] Setup Poetry environment"
-          command: echo 'export POETRY_VERSION=$POETRY_VERSION; export POETRY_HOME=./.poetry; export PATH=$POETRY_HOME/bin:$PATH' >> $BASH_ENV
+      # - run:
+      #     name: "[python] Setup Poetry environment"
+      #     command: echo 'export POETRY_VERSION=$POETRY_VERSION; export POETRY_HOME=./.poetry; export PATH=$POETRY_HOME/bin:$PATH' >> $BASH_ENV
       
-      - restore_cache:
-          name: "[python] Restore the Poetry cache"
-          keys:
-            - poetry-$POETRY_VERSION
+      # - restore_cache:
+      #     name: "[python] Restore the Poetry cache"
+      #     keys:
+      #       - poetry-$POETRY_VERSION
             
-      - save_cache:
-          name: "[python] Save the Poetry cache"
-          key: poetry-$POETRY_VERSION
-          paths:
-            - ./.poetry
+      # - save_cache:
+      #     name: "[python] Save the Poetry cache"
+      #     key: poetry-$POETRY_VERSION
+      #     paths:
+      #       - ./.poetry
             
       - run:
           name: Install Dependencies
