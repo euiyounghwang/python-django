@@ -94,7 +94,7 @@ jobs:
           command: |
             conda/bin/conda create --yes --quiet --name python-django python=3.9
             source conda/bin/activate python-django
-            curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/$POETRY_VERSION/get-poetry.py | python
+            pip install poetry==$POETRY_VERSION
             poetry config virtualenvs.in-project true
             poetry init
             poetry install
