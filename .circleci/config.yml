@@ -72,11 +72,33 @@ jobs:
             conda/bin/conda install -y boto3=1.9.7
             fi
     
+      
+      - run:
+          name: "[python] Setup Poetry environment"
+          command: echo 'export POETRY_VERSION=1.3.2; export POETRY_HOME=./.poetry; export PATH=$POETRY_HOME/bin:$PATH' >> $BASH_ENV
+      
+      - restore_cache:
+          name: "[python] Restore the Poetry cache"
+          keys:
+            - poetry-1.3.2
+            
+      - save_cache:
+          name: "[python] Save the Poetry cache"
+          key: poetry-1.3.2
+          paths:
+            - ./.poetry
+            
+      - restore_cache:
+          name: "[python] Restore the dependencies cache"
+          keys:
+            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}-{{ .Branch }}-{{ checksum "./poetry.lock" }}
+            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}-{{ .Branch }}
+            - venv-<< parameters.deps_cache_version >>-{{ .Environment.CIRCLE_JOB }}
     
       - run:
           name: Install Dependencies
           command: |
-            conda/bin/conda create --yes --quiet --name python-django python=3.6
+            conda/bin/conda create --yes --quiet --name python-django python=3.9
             source conda/bin/activate python-django
             curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/1.3.2/get-poetry.py | python
             poetry config virtualenvs.in-project true
