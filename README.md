@@ -235,7 +235,7 @@ rest_api/tests/test_rest_api.py::test_api_users_swagger[3] PASSED               
 rest_api/tests/test_rest_api.py::test_api_es_search_swagger PASSED                                                                   [100%]
 ```
 
-HTTP Response status codes
+HTTP Response status codes (<i>https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204</i>)
 ```http
 100 Continue
 101 Switching Protocols
