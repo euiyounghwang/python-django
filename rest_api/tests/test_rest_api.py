@@ -18,7 +18,7 @@ def test_api_skip():
     "name",
     ['username_1', 'username_2', 'username_3']
 )
-def test_model_get_swagger(mock_client, name):
+def test_model_CRUD_swagger(mock_client, name):
     ''' API Call for CRUD model '''
     assert mock_client is not None
     response = mock_client.get(
