@@ -96,7 +96,6 @@ jobs:
             source conda/bin/activate python-django
             pip install poetry==$POETRY_VERSION
             poetry config virtualenvs.in-project true
-            poetry init
             poetry install
 
    
