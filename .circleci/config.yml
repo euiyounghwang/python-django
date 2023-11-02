@@ -93,11 +93,15 @@ jobs:
           name: Install Dependencies
           command: |
             conda/bin/conda create --yes --quiet --name python-django python=3.9
-            source conda/bin/activate python-django
-            pip install poetry==$POETRY_VERSION
-            poetry config virtualenvs.in-project true
+            source conda/bin/activate python-django && pip install poetry==$POETRY_VERSION
             poetry install
 
+      - run:
+          name: tests
+          command: |
+            source conda/bin/activate python-django &&
+            poetry run python -m py.test -v rest_api/tests --disable-warnings
+   
    
 #   publish-latest:
 
