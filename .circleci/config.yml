@@ -11,7 +11,7 @@ jobs:
       - image: cimg/base:2023.08
       - image: circleci/postgres:9.6
         environment:
-          TEST_DATABASE_URL: postgresql://postgres:1234@localhost:15432/postgres
+          TEST_DATABASE_URL: postgresql://postgres:1234@localhost:5432/postgres
           # POSTGRES_USER: postgres
           # POSTGRES_DB: 1234
           POSTGRES_HOST_AUTH_METHOD: trust
