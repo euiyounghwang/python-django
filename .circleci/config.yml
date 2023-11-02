@@ -53,14 +53,31 @@ jobs:
       - run:
           name: Start Elasticsearch 7
           command: |
-            ES_JAVA_OPTS="-Xms1g -Xmx1g" elasticsearch-7.13.0/bin/elasticsearch -E http.port=9200
+            ES_JAVA_OPTS="-Xms1g -Xmx1g" elasticsearch-7.13.0/bin/elasticsearch -E http.port=9209
           background: true
+          
+          
+      - run:
+          name: Install Conda
+          command: |
+            if [ ! -e conda ]; then
+            wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh
+            bash Miniconda3-4.7.12.1-Linux-x86_64.sh -b -p conda
+            echo 'conda==4.7.12' > conda/conda-meta/pinned
 
-#      - restore_cache:
-#          key: fnbees-{{ .Branch }}-{{ checksum "environment_omnisearch.lst" }}-{{ checksum "requirements_omnisearch.txt" }}
+            # Do a flexible solve from the getgo
+            conda/bin/conda config --set channel_priority flexible
 
-      - restore_cache:
-          key: fnbees-{{ .Branch }}-{{ checksum "requirements.txt" }}
+            # Install boto
+            conda/bin/conda install -y boto3=1.9.7
+    
+    
+      - run:
+          name: Install Dependencies
+          command: |
+            conda/bin/conda create --yes --quiet --name python-django python=3.6
+            source conda/bin/activate python-django
+            poetry install
 
    
 #   publish-latest:
