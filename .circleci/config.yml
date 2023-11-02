@@ -14,7 +14,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: 1234
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_PORT: 15432
+          PGPORT: 15432
 #      - image: cimg/openjdk:11.0.12
       # - image: cimg/python:3.10
       - image: cimg/python:3.9.7
@@ -101,7 +101,7 @@ jobs:
           name: tests
           command: |
             source conda/bin/activate python-django &&
-            poetry run python -m py.test -v rest_api/tests --disable-warnings
+            poetry run python -m py.test -v rest_api/tests --cov --disable-warnings
    
    
   publish-latest:
