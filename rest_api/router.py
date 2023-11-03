@@ -3,7 +3,7 @@ from rest_framework import routers
 from .models import Student, userRank
 
 from .views import (
-    StudentViewSet, userRankViewSet, 
+    StudentViewSet, userRankViewSet, IpViewSet
 )
 
 # --
@@ -12,4 +12,5 @@ from .views import (
 router = routers.DefaultRouter()
 router.register(r'student', StudentViewSet)
 # router.register(r'userrank', userRankViewSet)
+# router.register(r'ip', IpViewSet)
  # --

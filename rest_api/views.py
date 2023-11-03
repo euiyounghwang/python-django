@@ -17,7 +17,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import Student, userRank, Ip
-from .serializers import StudentSerializer, userRankSerializer
+from .serializers import StudentSerializer, userRankSerializer, IpSerializer
 from django_redis import get_redis_connection
 
 # --
@@ -44,13 +44,20 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
 
 
+class IpViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows students to be viewed or edited.
+    """
+    queryset = Ip.objects.all()
+    serializer_class = IpSerializer
+
+
 class userRankViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows students to be viewed or edited.
     """
     queryset = userRank.objects.all()
     serializer_class = userRankSerializer
-
 
 
 class RedisView():
