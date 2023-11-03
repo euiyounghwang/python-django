@@ -108,7 +108,44 @@ class QueryBuilder:
             self.es_query.update(aggs_clauses)
 
     
-    def build_terms_filters_batch(self, field, _terms, max_terms_count=65000):
+    def build_term_filter(self, filter_list, op):
+        # accumulate a list of all conditions for this filter nesting level
+        conditions = []
+
+        for filter in filter_list:
+            if filter.get('fieldname', None) is not None:
+                # a plain terms clause. add its field name and values.
+                term = filter['fieldname']
+                values = filter.get('values', [])
+                conditions.append({
+                    'bool': {
+                        'filter': {
+                            'terms': {
+                                term : values
+                            }
+                        }
+                    }
+                })
+            elif filter.get('or'):
+                conditions.append(
+                    self.build_term_filter(filter['or'], 'should')
+                )
+            elif filter.get('and'):
+                conditions.append(
+                    self.build_term_filter(filter['and'], 'must')
+                )
+            elif filter.get('not'):
+                conditions.append(
+                    self.build_term_filter(filter['not'], 'must_not')
+                )
+
+        return {
+            'bool': {
+                op: conditions
+            }
+        }
+        
+    def build_terms_filters_batch(self, fieldname, _terms, max_terms_count=65000):
         ''' The logic to separate terms clauses based on max_terms_count '''
         
         if len(_terms) < 2 and "*" in _terms:
@@ -118,7 +155,7 @@ class QueryBuilder:
         terms_chunks = [_terms[i: i + max_terms_count] for i in range(0, len(_terms), max_terms_count)]
         print(terms_chunks)
         for _chunks in terms_chunks:
-            terms_filters.append({"terms": {field: _chunks}})
+            terms_filters.append({"terms": {fieldname: _chunks}})
 
         return terms_filters
     
@@ -135,7 +172,7 @@ class QueryBuilder:
                 "must": [
                     {
                         "bool": {
-                            "should": self.build_terms_filters_batch(field='genre',
+                            "should": self.build_terms_filters_batch(fieldname='genre',
                                                                     _terms=oas_query.get("ids_filter",[]), 
                                                                      max_terms_count=1000)
                         }

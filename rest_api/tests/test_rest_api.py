@@ -96,10 +96,11 @@ def test_api_users_swagger(mock_client, obj_id):
 
 
 # @pytest.mark.skip(reason="Need to create index 'test_omnisearch_v1'")
-def test_api_es_search_swagger(mock_client):
+def test_api_es_search_swagger(mock_client, mock_oas_query):
     ''' API call '''
     assert mock_client is not None
 
+    '''
     request_body = {
         "include_basic_aggs": True,
         "pit_id": "",
@@ -109,9 +110,10 @@ def test_api_es_search_swagger(mock_client):
         "sort_order": "DESC",
         "start_date": "2021 01-01 00:00:00"
     }
+    '''
     response = mock_client.post(
         '/rest_api/es/search',
-        data=json.dumps(request_body),
+        data=json.dumps(mock_oas_query),
         content_type='application/json',
     )
     assert response.status_code == 200

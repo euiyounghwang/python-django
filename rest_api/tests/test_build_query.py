@@ -9,6 +9,7 @@ from ..service.Utils.ES_Utils import json_value_to_transform_trim
 ''' pytest -sv rest_api/tests/test_build_query.py::test_transform_trim '''
 
 
+
 @pytest.mark.skip(reason="no way of currently testing this")
 def test_build_skip():
     assert 1 != 1
@@ -29,8 +30,8 @@ def test_query_string_clause(mock_query_builder):
         "start_date": "2021 01-01 00:00:00"
     }
     
-    query_string_clause = mock_query_handler.transform_query_string(payload)
-    assert query_string_clause == {
+    expected_query_string = mock_query_handler.transform_query_string(payload)
+    assert expected_query_string == {
         "query_string": {
             "fields": [
               "*"
@@ -44,7 +45,7 @@ def test_query_string_clause(mock_query_builder):
     # --
     # trim all values in json
     # --
-    assert json_value_to_transform_trim(query_string_clause) == {
+    assert json_value_to_transform_trim(expected_query_string) == {
         "query_string": {
             "fields": [
               "*"
@@ -67,8 +68,8 @@ def test_pagination_clause(mock_query_builder):
     # --
     # Paging with pit
     sort_values = [5.5595245, "Jai Prakash", 4294970921]
-    search_after_clause = mock_query_builder.add_pagination(search_after=sort_values)
-    assert search_after_clause == sort_values
+    expected_search_after_clause = mock_query_builder.add_pagination(search_after=sort_values)
+    assert expected_search_after_clause == sort_values
 
 
 def test_transform_trim():
@@ -124,10 +125,10 @@ def test_build_terms(mock_query_builder, _term):
 
     mock_ids_filter = _term
 
-    response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-        field="_id", _terms=mock_ids_filter, max_terms_count=5)
-    assert response_ids_filter_query is not None
-    assert response_ids_filter_query == [
+    expected_ids_filter_query = mock_query_handler.build_terms_filters_batch(
+        fieldname="_id", _terms=mock_ids_filter, max_terms_count=5)
+    assert expected_ids_filter_query is not None
+    assert expected_ids_filter_query == [
         {
             "terms": {
                 "_id": [
@@ -158,10 +159,10 @@ def test_build_terms_batch(mock_query_builder):
         "111", '222'
     ]
 
-    response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-       field="_id", _terms=mock_ids_filter, max_terms_count=1)
-    assert response_ids_filter_query is not None
-    assert response_ids_filter_query == [
+    expected_ids_filter_query = mock_query_handler.build_terms_filters_batch(
+       fieldname="_id", _terms=mock_ids_filter, max_terms_count=1)
+    assert expected_ids_filter_query is not None
+    assert expected_ids_filter_query == [
         {
             "terms": {
                 "_id": [
@@ -178,10 +179,10 @@ def test_build_terms_batch(mock_query_builder):
         }
     ]
 
-    response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-        field="_id", _terms=mock_ids_filter, max_terms_count=5)
-    assert response_ids_filter_query is not None
-    assert response_ids_filter_query == [
+    expected_ids_filter_query = mock_query_handler.build_terms_filters_batch(
+        fieldname="_id", _terms=mock_ids_filter, max_terms_count=5)
+    assert expected_ids_filter_query is not None
+    assert expected_ids_filter_query == [
         {
             "terms": {
                 "_id": [
@@ -191,3 +192,31 @@ def test_build_terms_batch(mock_query_builder):
             }
         }
     ]
+    
+
+def test_build_terms_filter(mock_query_builder, mock_oas_query):
+    ''' terms query build test '''
+    ''' pytest -sv rest_api/tests/test_build_query.py::test_build_terms_filter '''
+    assert mock_query_builder is not None
+    assert mock_oas_query is not None
+    
+    mock_query_handler = mock_query_builder
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
+    print(json.dumps(expected_term_filters, indent=2))
+    assert expected_term_filters == {
+        "bool": {
+            "must": [
+            {
+                "bool": {
+                "filter": {
+                    "terms": {
+                        "genre": [
+                            "unknown"
+                       ]
+                    }
+                }
+                }
+            }
+            ]
+        }
+    }

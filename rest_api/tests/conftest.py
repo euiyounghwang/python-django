@@ -12,8 +12,21 @@ def mock_es_client():
 def mock_query_builder():
     return QueryBuilderInject
 
-
 @pytest.fixture
 def mock_client():
    from rest_framework.test import APIClient
    return APIClient()
+
+@pytest.fixture
+def mock_oas_query():
+    oas_query = {
+        "include_basic_aggs": True,
+        "pit_id": "",
+        "query_string": "Cryptocurrency",
+        "ids_filter": ["*"],
+        "term_filters": [{"fieldname": "genre", "values": ["unknown"]}],
+        "size": 20,
+        "sort_order": "DESC",
+        "start_date": "2021 01-01 00:00:00"
+    }
+    return oas_query
