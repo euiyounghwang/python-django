@@ -201,22 +201,48 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
     assert mock_oas_query is not None
     
     mock_query_handler = mock_query_builder
+    # --
+    # op : 'must'
+    # --
     expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
     print(json.dumps(expected_term_filters, indent=2))
     assert expected_term_filters == {
         "bool": {
             "must": [
-            {
-                "bool": {
-                "filter": {
-                    "terms": {
-                        "genre": [
-                            "unknown"
-                       ]
+                {
+                    "bool": {
+                        "filter": {
+                            "terms": {
+                                "genre": [
+                                    "unknown"
+                            ]
+                            }
+                        }
                     }
                 }
+            ]
+        }
+    }
+    
+    # --
+    # op : 'should'
+    # --
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'should')
+    print(json.dumps(expected_term_filters, indent=2))
+    assert expected_term_filters == {
+        "bool": {
+            "should": [
+                {
+                    "bool": {
+                        "filter": {
+                            "terms": {
+                                "genre": [
+                                    "unknown"
+                            ]
+                            }
+                        }
+                    }
                 }
-            }
             ]
         }
     }
