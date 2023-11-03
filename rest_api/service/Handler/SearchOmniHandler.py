@@ -53,7 +53,14 @@ class SearchOmniHandler(object):
         es_hits = es_result["hits"]
         results = [es_hit for es_hit in es_hits["hits"]]
 
-        self.search_after = results[int(len(results))-1]["sort"] if results else None
+        if results:
+            if oas_query.get('direction') == 'right':
+                self.search_after = results[int(len(results))-1]["sort"]
+                self.logger.warn("Paging to Right - {}".format(len(results)))
+            else:
+                self.search_after = results[0]["sort"]
+                self.logger.warn("Paging to Left")
+                    
         es_hits['pit'] = pit_id
         es_hits['aggregations'] = es_result['aggregations']
 

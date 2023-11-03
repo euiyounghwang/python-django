@@ -145,11 +145,11 @@
     <div class="topnav">
         <a class="active" href=".">Home</a>
         <a href="#about">Django-UI</a>
-        <!-- <div class="autocomplete" style="width:250px;"> -->
-            <!-- </div> -->
         <div class="search-container">
           <form action="search" method="post" name="paging">
-            <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
+            <!-- <div class="autocomplete" style="width:250px;"> -->
+              <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
+            <!-- </div> -->
             <input type="hidden" value="" name="pit">
             <input type="hidden" value="" name="direction">
             <button type="submit"><i class="fa fa-search"></i></button>
@@ -164,12 +164,13 @@
     <p align="center">
         <!-- <a href="?page=1">&laquo; first</a> -->
         <!-- <a href="?page={{ movies.previous_page_number }}">previous</a> -->
+        <!-- <a href="javascript:goPage('{{ keyword }}', '{{ pit_token }}', 'left');">Previous</a> -->
         <span class="current">
                     Page 
         </span>
 
         <!-- <a href="search?keyword={{keyword}}&pit={{ pit_token }}">next</a> -->
-        <a href="javascript:goPage('{{ keyword }}', '{{ pit_token }}', 'left');">Next</a>
+        <a href="javascript:goPage('{{ keyword }}', '{{ pit_token }}', 'right');">Next</a>
         <!-- <a href="?page={{ movies.paginator.num_pages }}">&raquo;</a> -->
     </p>
       <!--end of Pagination-->
@@ -177,6 +178,7 @@
     {% for hit in response %}
         <div class="book">
             <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
+            <p>Genre: <b>{{ hit.source.genre }}</b></p>
             <p>{{ hit.source.plot | slice:500 }}..</p>
             {% for k, v in hit.highlight.items %}
             <p>{{ k}} - {{ v.0 | safe | highlight_yellow:keyword}}</p>

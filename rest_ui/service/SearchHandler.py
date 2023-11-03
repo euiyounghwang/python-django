@@ -22,6 +22,7 @@ class UI_SearchHandler(object):
         self.logger.warn("UI_SearchHandler: keyword - {}, pit - {} ".format(keyword, pit))
         self.requestobject.get_payload()['query_string'] = keyword
         self.requestobject.get_payload()['pit_id'] = pit
+        self.requestobject.get_payload()['direction'] = direction
   
         result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
                          data=json.dumps(self.requestobject.get_payload()), 
