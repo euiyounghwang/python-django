@@ -108,7 +108,7 @@ class QueryBuilder:
             self.es_query.update(aggs_clauses)
 
     
-    def build_terms_filters_batch(self, _terms, max_terms_count=65000):
+    def build_terms_filters_batch(self, field, _terms, max_terms_count=65000):
         ''' The logic to separate terms clauses based on max_terms_count '''
         
         if len(_terms) < 2 and "*" in _terms:
@@ -118,7 +118,7 @@ class QueryBuilder:
         terms_chunks = [_terms[i: i + max_terms_count] for i in range(0, len(_terms), max_terms_count)]
         print(terms_chunks)
         for _chunks in terms_chunks:
-            terms_filters.append({"terms": {"_id": _chunks}})
+            terms_filters.append({"terms": {field: _chunks}})
 
         return terms_filters
     
@@ -135,7 +135,9 @@ class QueryBuilder:
                 "must": [
                     {
                         "bool": {
-                            "should": self.build_terms_filters_batch(_terms=oas_query.get("ids_filter",[]), max_terms_count=1000)
+                            "should": self.build_terms_filters_batch(field='genre',
+                                                                    _terms=oas_query.get("ids_filter",[]), 
+                                                                     max_terms_count=1000)
                         }
                     }
                 ]

@@ -104,6 +104,7 @@ def test_api_es_search_swagger(mock_client):
         "include_basic_aggs": True,
         "pit_id": "",
         "query_string": "Cryptocurrency",
+        "ids_filter": ["*"],
         "size": 20,
         "sort_order": "DESC",
         "start_date": "2021 01-01 00:00:00"

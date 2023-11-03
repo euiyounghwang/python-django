@@ -23,6 +23,7 @@ def test_query_string_clause(mock_query_builder):
         "include_basic_aggs": True,
         "pit_id": "",
         "query_string": "Cryptocurrency ",
+        "ids_filter" : ["*"],
         "size": 20,
         "sort_order": "DESC",
         "start_date": "2021 01-01 00:00:00"
@@ -124,7 +125,7 @@ def test_build_terms(mock_query_builder, _term):
     mock_ids_filter = _term
 
     response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-        _terms=mock_ids_filter, max_terms_count=5)
+        field="_id", _terms=mock_ids_filter, max_terms_count=5)
     assert response_ids_filter_query is not None
     assert response_ids_filter_query == [
         {
@@ -158,7 +159,7 @@ def test_build_terms_batch(mock_query_builder):
     ]
 
     response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-        _terms=mock_ids_filter, max_terms_count=1)
+       field="_id", _terms=mock_ids_filter, max_terms_count=1)
     assert response_ids_filter_query is not None
     assert response_ids_filter_query == [
         {
@@ -178,7 +179,7 @@ def test_build_terms_batch(mock_query_builder):
     ]
 
     response_ids_filter_query = mock_query_handler.build_terms_filters_batch(
-        _terms=mock_ids_filter, max_terms_count=5)
+        field="_id", _terms=mock_ids_filter, max_terms_count=5)
     assert response_ids_filter_query is not None
     assert response_ids_filter_query == [
         {
