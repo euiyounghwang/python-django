@@ -39,7 +39,7 @@ class Cache:
       
    @retry(ConnectionResetError, delay=0.1, tries=5)
    def set_json_key(self, key, value):
-      self.REQEUST_INFO.update({"OBJECT_V": value, 'INPUT_DATE' : datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+      self.REQEUST_INFO.update({"KEY" : key, "OBJECT_V": value, 'INPUT_DATE' : datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
       obj = json.dumps(self.REQEUST_INFO, ensure_ascii=False).encode('utf-8')
       self.client.set(key, obj, timeout=self.time_to_expire_s)
       

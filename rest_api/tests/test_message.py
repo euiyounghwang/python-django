@@ -3,6 +3,7 @@ import unittest
 import uuid
 # import asyncio
 from ..injector import Redis_Cache
+import json
 
 ''' pytest -sv rest_api/tests/test_message.py::TestMessageuilders::test_redis_assign_test '''
 
@@ -19,7 +20,16 @@ class TestMessageuilders(unittest.TestCase):
         
         UUID = str(uuid.uuid4())
         MockRedisInsHandler.set_json_key(UUID, 'test')
-        # print(RedisCacheHandlers.get_transformed_dict('1234')[0])
+        
+        key_pare = json.loads(MockRedisInsHandler.get_key(UUID))
+        key_pare = {k : v for k, v in key_pare.items() if k != 'INPUT_DATE'}
+        assert key_pare == {
+            "KEY": UUID,
+            "REQUEST_USER_ID": "pd292816",
+            "OBJECT_V": "test"
+        }
+        
+        print(json.dumps(key_pare, indent=2))
         response_json = MockRedisInsHandler.get_transformed_dict(UUID)[0]
         
         exclue_columns = ['INPUT_DATE', 'EXPIRED_SECONDS']
