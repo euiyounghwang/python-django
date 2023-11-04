@@ -289,6 +289,87 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
     }
     
     # --
+    # op : 'not' and 'AND'
+    # --
+    mock_oas_query.update({
+        'term_filters' : [
+            {
+                "not": [
+                    {
+                        'fieldname': 'genre',
+                        'values': ['unknown']
+                    },
+                    {
+                        "or": [
+                            {
+                                'fieldname': 'genre',
+                                'values': ['unknown']
+                            },
+                            {
+                                'fieldname': 'genre',
+                                'values': ['unknown1']
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    })
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
+    print("\nexpected_term_filters 'not' and 'AND' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    assert expected_term_filters == {
+        "bool": {
+            "must": [
+            {
+                "bool": {
+                "must_not": [
+                    {
+                        "bool": {
+                            "filter": {
+                                "terms": {
+                                    "genre": [
+                                    "unknown"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "bool": {
+                            "should": [
+                            {
+                                "bool": {
+                                    "filter": {
+                                        "terms": {
+                                        "genre": [
+                                            "unknown"
+                                        ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "bool": {
+                                    "filter": {
+                                        "terms": {
+                                        "genre": [
+                                            "unknown1"
+                                        ]
+                                        }
+                                    }
+                                }
+                            }
+                            ]
+                        }
+                    }
+                ]
+                }
+            }
+            ]
+        }
+    }
+        
+    # --
     # op : 'or'
     # --
     mock_oas_query.update({

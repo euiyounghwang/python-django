@@ -30,3 +30,13 @@ def mock_oas_query():
         "start_date": "2021 01-01 00:00:00"
     }
     return oas_query
+
+
+@pytest.fixture
+def userRank_conftest(db):
+    """
+    Create a test user.
+    """
+    from ..models import userRank
+    created = userRank.objects.create(username='john', deposit=11, earning_rate=11)
+    return created

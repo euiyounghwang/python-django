@@ -16,7 +16,7 @@ class userRank(models.Model):
         return f"{self.username, self.deposit, self.earning_rate}"
     
     def json(self):
-        return {'username':str(self.username)}
+        return {'username':self.username, 'deposit' : self.deposit, 'earning_rate' : self.earning_rate}
     
 
 # Create your models here.
