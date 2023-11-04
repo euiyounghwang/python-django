@@ -205,7 +205,7 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
     # op : 'must'
     # --
     expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
-    print(json.dumps(expected_term_filters, indent=2))
+    print("\nexpected_term_filters 'must' - {}".format(json.dumps(expected_term_filters, indent=2)))
     assert expected_term_filters == {
         "bool": {
             "must": [
@@ -228,7 +228,7 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
     # op : 'should'
     # --
     expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'should')
-    print(json.dumps(expected_term_filters, indent=2))
+    print("expected_term_filters 'should' - {}".format(json.dumps(expected_term_filters, indent=2)))
     assert expected_term_filters == {
         "bool": {
             "should": [
@@ -238,7 +238,46 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
                             "terms": {
                                 "genre": [
                                     "unknown"
-                            ]
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+    
+    
+    # --
+    # op : 'must' with multiple term_filters
+    # --
+    mock_oas_query.update({'term_filters' : [
+        {"fieldname": "genre", "values": ["unknown"]},
+        {"fieldname": "film", "values": ["sports"]},
+    ]})
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
+    print("\nexpected_term_filters 'must' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    assert expected_term_filters == {
+        "bool": {
+            "must": [
+                {
+                    "bool": {
+                        "filter": {
+                            "terms": {
+                                "genre": [
+                                    "unknown"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "bool": {
+                        "filter": {
+                            "terms": {
+                                "film": [
+                                    "sports"
+                                ]
                             }
                         }
                     }
