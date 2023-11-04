@@ -228,7 +228,7 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
     # op : 'should'
     # --
     expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'should')
-    print("expected_term_filters 'should' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    print("\nexpected_term_filters 'should' - {}".format(json.dumps(expected_term_filters, indent=2)))
     assert expected_term_filters == {
         "bool": {
             "should": [
@@ -298,6 +298,10 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
                     {
                         'fieldname': 'genre',
                         'values': ['unknown']
+                    },
+                     {
+                        'fieldname': 'genre',
+                        'values': ['unknown1']
                     }
                 ]
             }
@@ -317,6 +321,17 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
                                         "terms": {
                                             "genre": [
                                                 "unknown"
+                                            ]
+                                        }
+                                    }
+                                }
+                             },
+                            {
+                                "bool": {
+                                    "filter": {
+                                        "terms": {
+                                            "genre": [
+                                                "unknown1"
                                             ]
                                         }
                                     }
