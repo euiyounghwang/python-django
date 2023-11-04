@@ -247,6 +247,87 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
         }
     }
     
+    # --
+    # op : 'not'
+    # --
+    mock_oas_query.update({
+        'term_filters' : [
+            {
+                "not": [
+                    {
+                        'fieldname': 'genre',
+                        'values': ['unknown']
+                    }
+                ]
+            }
+        ]
+    })
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
+    print("\nexpected_term_filters 'not' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    assert expected_term_filters == {
+        "bool": {
+            "must": [
+                {
+                    "bool": {
+                        "must_not": [
+                            {
+                                "bool": {
+                                    "filter": {
+                                        "terms": {
+                                            "genre": [
+                                                "unknown"
+                                            ]
+                                        }
+                                    }
+                                }
+                             }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+    
+    # --
+    # op : 'or'
+    # --
+    mock_oas_query.update({
+        'term_filters' : [
+            {
+                "or": [
+                    {
+                        'fieldname': 'genre',
+                        'values': ['unknown']
+                    }
+                ]
+            }
+        ]
+    })
+    expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
+    print("\nexpected_term_filters 'or' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    assert expected_term_filters == {
+        "bool": {
+            "must": [
+                {
+                    "bool": {
+                        "should": [
+                            {
+                                "bool": {
+                                    "filter": {
+                                        "terms": {
+                                            "genre": [
+                                                "unknown"
+                                            ]
+                                        }
+                                    }
+                                }
+                             }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
     
     # --
     # op : 'must' with multiple term_filters
@@ -256,7 +337,7 @@ def test_build_terms_filter(mock_query_builder, mock_oas_query):
         {"fieldname": "film", "values": ["sports"]},
     ]})
     expected_term_filters = mock_query_handler.build_term_filter(mock_oas_query.get("term_filters"), 'must')
-    print("\nexpected_term_filters 'must' - {}".format(json.dumps(expected_term_filters, indent=2)))
+    print("\nexpected_term_filters 'must' with multiple filters - {}".format(json.dumps(expected_term_filters, indent=2)))
     assert expected_term_filters == {
         "bool": {
             "must": [
