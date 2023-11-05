@@ -49,7 +49,8 @@ def test_django_reverse_users_request(mock_client):
    # with arguments
    obj_id = 1
    # url = reverse('rest_api_app:users', kwargs={'object_id' : 1})
-   url = resolve_url('rest_api_app:users')
+   # url = resolve_url('rest_api_app:users')
+   url = reverse('rest_api_app:users')
    print(url)
    response = mock_client.get(url + "?obj_id={}".format(obj_id))
    assert response.status_code == 200

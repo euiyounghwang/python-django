@@ -23,6 +23,19 @@ DATABASES = {
         'PASSWORD': '1234',
         'HOST': os.getenv("REDIS_HOST", "localhost-prod"),
         'PORT': '15432',
+    },
+     "mongo_db": {
+        "ENGINE": "djongo",
+        "NAME": "mongo-prod",
+        "CLIENT": {
+            "host": os.getenv('MONGO_DB_HOST', "localhost"),
+            "port": int(os.getenv('MONGO_DB_PORT', 27017)),
+            "username": "postgres",
+            "password": "1234",
+        },
+        'TEST': {
+            'MIRROR': 'default',
+        },
     }
 }
 

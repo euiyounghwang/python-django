@@ -1,7 +1,29 @@
-from django.db import models
+from djongo import models
+
+# ----------------------------------------
+# Mongo Models
+
+class Log(models.Model):
+    _id = models.ObjectIdField()
+    message = models.TextField(max_length=1000)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        _use_db = 'mongo_db'
+        ordering = ("-created_at", )
+
+    def __str__(self):
+        return self.messag
+
+
+
+
+# ----------------------------------------
+# Django Models
 
 # Create your models here.
-
 class userRank(models.Model):
     username = models.CharField(max_length=30, primary_key=True)
     deposit = models.IntegerField(default=1000000)

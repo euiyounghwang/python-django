@@ -3,6 +3,53 @@ version: '3'
 name: python-django-api
 services:
   
+  cache:
+    image: redis:6.2-alpine
+    container_name: redis-local
+    restart: always
+    ports:
+      - '6379:6379'
+    # command: redis-server --save 20 1 --loglevel warning --requirepass MTIzNA==
+    volumes: 
+      - cache:/data
+    networks:
+      - bridge
+  
+  # MongoDB is a NoSQL database service with seamless performance and options for scaling. It uses a JSON-like storage model and doesn’t require a predefined database schema. 
+  # docker run -d -p 27017:27017 --name mongo-local -e MONGO_INITDB_ROOT_USERNAME=postgres -e MONGO_INITDB_ROOT_PASSWORD=1234 mongo:latest
+  mongo:
+    image: mongo
+    container_name: mongo-local
+    ports:
+      - '27017:27017'
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=postgres
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=test
+    networks:
+      - bridge
+ 
+        
+  # docker run --name postgres-local -e POSTGRES_PASSWORD=1234 -p 15432:5432 -d postgres
+  postgres:
+    image: postgres
+    container_name: postgres-local
+    ports:
+      - 15432:5432
+    restart: always
+    volumes:
+      # - ./backup:/var/lib/postgresql/data
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgres
+    networks:
+      - bridge
+      
   fn-django-search-api:
     image: fn-django-search-api:es
     container_name: fn-django-search-api
