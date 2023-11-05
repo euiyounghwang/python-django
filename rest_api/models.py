@@ -42,7 +42,7 @@ class Student(models.Model):
         return f"{self.name, self.grade, self.age}"
     
     def json(self):
-        return {'name':str(self.name)}
+        return {'name':self.name, 'grade' : self.grade, 'age' : self.age, 'home_address' : self.home_address, 'gender' : self.gender}
 
 
 
