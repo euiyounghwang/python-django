@@ -96,9 +96,9 @@ class QueryBuilder:
         if oas_query.get("include_basic_aggs"):
             aggs_clauses = {
                 "aggs": {
-                    "bill_type": {
+                    "genre": {
                         "terms": {
-                            "field": "bill_type.keyword",
+                            "field": "genre.keyword",
                             "size": 150000
                         }
                     }

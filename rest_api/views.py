@@ -126,7 +126,7 @@ class SearchView():
             'size': openapi.Schema(type=openapi.TYPE_INTEGER, description='size', example=20),
             'sort_order': openapi.Schema(type=openapi.TYPE_STRING, description='sort_order', example="DESC"),
             # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
-            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2021 01-01 00:00:00", format="YYYY-MM-DD HH:MM:ss"),
+            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2021-01-01 00:00:00", format="YYYY-MM-DD HH:MM:ss"),
         }),
         # responses={200: Schema(type=TYPE_OBJECT)})
         responses={
