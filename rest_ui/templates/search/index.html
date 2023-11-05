@@ -175,13 +175,16 @@
     </p>
       <!--end of Pagination-->
     {% endif %}
-    <div style="height: 10px;">
-      {% for agg in response %}
-        {% for k, v in agg.genre.buckets.items %}
-        <p>test..{{ k}} ({{ v}})</p>
+    <!-- {{ aggs }} -->
+    <!-- <div style="height: 100px;">
+      <p>
+      {% for agg in aggs %}
+        {% for each_genre in agg.genre.buckets %}
+          {{ each_genre.key}} <a href="#">({{ each_genre.doc_count}})</a>
         {% endfor %}    
       {% endfor %}
-    </div>
+      </p>
+    </div> -->
     {% for hit in response %}
         <div class="book">
             <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>

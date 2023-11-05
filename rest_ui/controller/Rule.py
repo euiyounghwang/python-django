@@ -17,7 +17,7 @@ class Rule(object):
             "direction" : "right",
             "size": 10,
             "sort_order": "DESC",
-            "start_date": "2021 01-01 00:00:00"
+            "start_date": "2021-01-01 00:00:00"
         }
         
         self.response_sample = {

@@ -32,19 +32,21 @@ class UI_SearchHandler(object):
         # self.logger.info(json.dumps(result.json(), indent=2))
         # self.logger.info(json.dumps(RequestObject.get_search_result()['hits'], indent=2))
         
-        hits = []
+        hits, aggs = [], []
         response_results_json = result.json()
         # print(response_results_json)
         # response_results_json = self.requestobject.get_search_result()
         if len(response_results_json['message']['hits']) > 0:
             for hit in response_results_json['message']['hits']:
                hits.append({k.replace("_", '') : v for k, v in hit.items()})
+            aggs = [response_results_json['message']['aggregations']]
                 
         context = {
             'response': hits,
             'total' : int(response_results_json['message']['total']['value']),
             'keyword': keyword,
-            'pit_token' : response_results_json['message']['pit']
+            'pit_token' : response_results_json['message']['pit'],
+            'aggs' : aggs
         }
         # self.logger.info('UI_SearchHandler Results - {}'.format(json.dumps(context, indent=2)))
         return context
