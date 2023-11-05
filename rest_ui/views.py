@@ -87,5 +87,5 @@ def rest_search_apis(request):
   direction = request.POST.get("direction")
    
   context = search_handler.Search(keyword, pit, direction)
-  # logger.info('context : {}'.format(context))
+  logger.info('context : {}'.format(context))
   return render(request, 'search/index.html', context)

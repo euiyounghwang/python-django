@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "python_django"}]
 
 [tool.poetry.dependencies]
-python = "3.9.7"
+python = "^3.9"
 elasticsearch = "7.13.0"
 django = "^4.2.4"
 djangorestframework = "^3.14.0"
