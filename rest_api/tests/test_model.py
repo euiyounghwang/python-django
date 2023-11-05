@@ -18,7 +18,7 @@ def test_django_test_request(mock_client):
 
 
 @pytest.mark.django_db
-def test_django_test_request(mock_client):
+def test_django_reverse_request(mock_client):
    ''' reverse(app_name:name for url) '''
 #    reverse("item-detail", args=[item_id])
    url = reverse('rest_api_app:test_api')
