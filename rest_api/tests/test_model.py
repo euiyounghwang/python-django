@@ -7,7 +7,7 @@ import json
 
 ''' pytest -sv rest_api/tests/test_model.py '''
 
-def test_django_test_request(mock_client):
+def test_django_test_request():
    client = Client ()
    response = client.get('/rest_api/test')
    print(json.dumps(response.json(), indent=2))
@@ -18,6 +18,7 @@ def test_django_test_request(mock_client):
 
 
 @pytest.mark.django_db
+# To gain access to the database pytest-django get django_db mark or request one of the db, transactional_db 
 def test_django_reverse_test_request(mock_client):
    ''' reverse(app_name:name for url) '''
 #    reverse("item-detail", args=[item_id])
@@ -50,11 +51,27 @@ def test_django_reverse_users_request(mock_client):
    # url = reverse('rest_api_app:users', kwargs={'object_id' : 1})
    url = resolve_url('rest_api_app:users')
    print(url)
-   response = mock_client.get(url + "?obj_id={}".format(1))
+   response = mock_client.get(url + "?obj_id={}".format(obj_id))
    assert response.status_code == 200
    print(response)
    assert response.json() == {
       "message": "Get: hello, world!, value - 1"
+   }
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+   'obj_id',
+   ['Yasou', 'Guten tag','Bonjour']
+)
+def test_reverse_model_parametrize(mock_client, obj_id):
+   url = reverse('rest_api_app:users')
+   response = mock_client.get(
+       url, data={'obj_id': obj_id}
+   )
+   assert response.status_code == 200
+   assert response.json() == {
+      "message": "Get: hello, world!, value - {}".format(obj_id)
    }
 
 
