@@ -83,7 +83,7 @@ def create_index(es_client, _index):
         print('Creating..')
         # now create a new index
         es_client.indices.create(index=_index, body=mapping)
-        es_client.indices.put_alias(index, "omnisearch_search")
+        # es_client.indices.put_alias(index, "omnisearch_search")
         es_client.indices.refresh(index=index)
         print("Successfully created: {}".format(_index))
     except Exception as error:
