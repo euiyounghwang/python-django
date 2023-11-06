@@ -50,6 +50,9 @@ poetry add djangorestframework
 # For Swqgger
 poetry add django-rest-swagger
 poetry add drf-yasg
+poetry add django-cors-headers
+poetry add django-prometheus
+poetry add pytest-django
 ```
 
 Add 'rest_framework' to your INSTALLED_APPS setting.
