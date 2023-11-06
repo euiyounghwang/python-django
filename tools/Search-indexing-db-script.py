@@ -35,6 +35,7 @@ class Databases():
     def close(self):
         self.db.close()
         self.cursor.close()
+        print("Closed successfully!!!") 
 
 
 def get_db_connection():
