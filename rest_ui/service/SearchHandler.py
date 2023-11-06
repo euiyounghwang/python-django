@@ -24,6 +24,7 @@ class UI_SearchHandler(object):
         self.requestobject.get_payload()['pit_id'] = pit
         self.requestobject.get_payload()['direction'] = direction
   
+        self.logger.info('url={}/rest_api/es/search'.format(URL_HOST))
         result = requests.post(url="{}/rest_api/es/search".format(URL_HOST), 
                          data=json.dumps(self.requestobject.get_payload()), 
                          headers=self.requestobject.get_header()
@@ -36,6 +37,15 @@ class UI_SearchHandler(object):
         response_results_json = result.json()
         # print(response_results_json)
         # response_results_json = self.requestobject.get_search_result()
+        if not 'message' in response_results_json:
+            return {
+                'response': [],
+                'total' : 0,
+                'keyword': keyword,
+                'pit_token' : '',
+                'aggs' : []
+            }
+        
         if len(response_results_json['message']['hits']) > 0:
             for hit in response_results_json['message']['hits']:
                hits.append({k.replace("_", '') : v for k, v in hit.items()})
@@ -48,5 +58,5 @@ class UI_SearchHandler(object):
             'pit_token' : response_results_json['message']['pit'],
             'aggs' : aggs
         }
-        # self.logger.info('UI_SearchHandler Results - {}'.format(json.dumps(context, indent=2)))
+        # print('UI_SearchHandler Results - {}'.format(json.dumps(context, indent=2)))
         return context

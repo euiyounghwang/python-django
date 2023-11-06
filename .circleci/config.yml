@@ -21,7 +21,11 @@ jobs:
       - image: cimg/python:3.9.7
       - image: circleci/buildpack-deps:stretch
       - image: cimg/redis:6.2.6
-
+      - image: circleci/mongo:3.6
+        environment:
+          MONGODB_USERNAME: postgres
+          MONGODB_PASSWORD: 1234
+          
     resource_class: large
 
     environment:

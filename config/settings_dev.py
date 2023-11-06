@@ -12,7 +12,7 @@ from .settings import *
 # Custom Settings
 # --
 
-GLOBAL_ES_HOST = 'http://localhost:9209'
+GLOBAL_ES_HOST = os.getenv('ES_HOST', "http://localhost:9209")
 GLOBAL_HOST_URL = 'http://localhost:9999'
 
 # https://github.com/PylotStuff/django-mongodb-postgres

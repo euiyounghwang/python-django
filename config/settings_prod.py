@@ -12,23 +12,28 @@ from .settings import *
 # Custom Settings
 # --
 
-GLOBAL_ES_HOST = 'http://localhost:9209'
+# --
+# Custom Settings
+# --
+
+GLOBAL_ES_HOST = os.getenv('ES_HOST', "http://localhost:9209")
 GLOBAL_HOST_URL = 'http://localhost:9999'
 
+# https://github.com/PylotStuff/django-mongodb-postgres
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',  # database name
         'USER': 'postgres',
         'PASSWORD': '1234',
-        'HOST': os.getenv("REDIS_HOST", "localhost-prod"),
+        'HOST': os.getenv("REDIS_HOST", "localhost"),
         'PORT': '15432',
     },
-     "mongo_db": {
+    "mongo_db": {
         "ENGINE": "djongo",
-        "NAME": "mongo-prod",
+        "NAME": "mongo-local",
         "CLIENT": {
-            "host": os.getenv('MONGO_DB_HOST', "localhost"),
+            "host": os.getenv('MONGO_DB_HOST', "127.0.0.1"),
             "port": int(os.getenv('MONGO_DB_PORT', 27017)),
             "username": "postgres",
             "password": "1234",
@@ -39,8 +44,7 @@ DATABASES = {
     }
 }
 
-
-GLOBAL_REDIS_URL = "redis://{}:{}/{}".format(os.getenv("REDIS_HOST", "localhost-prod"), os.getenv("REDIS_PORT", 6379),os.getenv("REDIS_DATABASE", 0)),
+GLOBAL_REDIS_URL = "redis://{}:{}/{}".format(os.getenv("REDIS_HOST", "localhost"), os.getenv("REDIS_PORT", 6379),os.getenv("REDIS_DATABASE", 0)),
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
