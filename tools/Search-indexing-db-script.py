@@ -10,6 +10,7 @@ from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+import pandas as pd
 
 load_dotenv()
 
@@ -36,8 +37,8 @@ class Databases():
         self.cursor.execute(query)
         data = self.cursor.fetchall()
         rows = [dict(row) for row in data]
-        print(json.dumps(rows, indent=2, default=self.datetime_handler))
-        return rows
+        # print(json.dumps(rows, indent=2, default=self.datetime_handler))
+        return json.loads(json.dumps(rows, indent=2, default=self.datetime_handler))
 
     def commit(self):
         self.cursor.commit()
@@ -110,6 +111,32 @@ class Search():
             print('Error: {}, index: {}'.format(error, _index))
 
 
+    def buffered_json(self, df, index):
+        print("buffer_indexing_mode_run Loading..")
+        print(df)
+        # actions = []
+        # for i, row in df.iterrows():
+        #     doc = {
+        #         "title": row["Title"],
+        #         "ethnicity": row["Origin/Ethnicity"],
+        #         "director": row["Director"],
+        #         "cast": row["Cast"],
+        #         "genre": row["Genre"],
+        #         "plot": row["Plot"],
+        #         "year": row["Release Year"],
+        #         "wiki_page": row["Wiki Page"]
+        #     }
+
+        #     # actions.append({'index': {'_index': _index, '_id': i}})
+        #     actions.append({'index': {'_index': _index}})
+        #     actions.append(doc)
+
+        #     if Get_Buffer_Length(actions) > MAX_BYTES:
+        #         response = es.bulk(body=actions)
+        #         print("** indexing ** : {}".format(json.dumps(response, indent=2)))
+        #         del actions[:]
+
+
 
 def get_db_connection():
     ''' postgres connection '''
@@ -142,18 +169,47 @@ if __name__ == "__main__":
         
     es_client, client = None, None
     try:
+        total_size = 0
+        paging_size = 10.0
+        limit_position = 0
         client = Databases()
+        es_client = Search(host=es_host)
         if client:
             print("Connected successfully!!!")
+        
+        ''' total count '''
+        cnt_list = (client.execute(query='SELECT COUNT(*) as cnt from {}'.format('public.student'),))
+        
+        if cnt_list and isinstance(cnt_list, list):
+            total_size = int(cnt_list[0]['cnt'])
+            if total_size > 0:
+                limit_position = int(total_size//paging_size)
+            print('total cnt - {}, limit_position - {}'.format(total_size, limit_position))
             
         ''' offset == size, limit == paging number '''
-        client.execute(
-                query='SELECT * from {} LIMIT 10 OFFSET 0'.format('public.student'),
-                
-        )
+        for running_query in range(0, limit_position+1):
+            rows = client.execute(query='SELECT * from {} LIMIT {} OFFSET {}'.format(
+                                    'public.student', 
+                                    int(paging_size),
+                                    int(running_query),))
+            print(json.dumps(rows, indent=2))
+            ''' 
+            [
+                {'index': {'_index': _metrics_index}
+                {"id": 1, "name": "11", "grade": 2147483647, "age": 2147483647, "home_address": "string", "date": "2023-11-02 04:16:35", "gender": "Male"}
+                {'index': {'_index': _metrics_index}
+                ...
+            ]
+            Time Complexity : O(N^2) if it will make buffer_indexing_json with header like the above
+            for row in rows:
+                for k, v in row.items():
+                    print({k : v})
+            '''
+            es_client.buffered_json(df=pd.DataFrame.from_dict(rows), index=es_index_name)
         
-        # es_client = Search(host=es_host)
+        
         # es_client.create_index(_index=es_index_name)
+        
             
     except Exception as e:
         print("Connection - {}".format(str(e)))
