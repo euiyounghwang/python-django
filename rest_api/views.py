@@ -16,14 +16,15 @@ from drf_yasg.openapi import Schema, TYPE_OBJECT, TYPE_STRING, TYPE_ARRAY
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Student, userRank
-from .serializers import StudentSerializer, userRankSerializer
+from .models import Student, userRank, Ip
+from .serializers import StudentSerializer, userRankSerializer, IpSerializer
 from django_redis import get_redis_connection
 
 # --
 # Service
 # from .service.Handler.SearchOmniHandler import SearchOmniHandler
 from .injector import SearchOmniHandlerInject, QueryBuilderInject, logger, Redis_Cache
+from rest_framework.generics import GenericAPIView
 
 
 ITEM_NOT_FOUND = "Item not found for id: {}"
@@ -43,13 +44,20 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
 
 
+class IpViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows students to be viewed or edited.
+    """
+    queryset = Ip.objects.all()
+    serializer_class = IpSerializer
+
+
 class userRankViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows students to be viewed or edited.
     """
     queryset = userRank.objects.all()
     serializer_class = userRankSerializer
-
 
 
 class RedisView():
@@ -118,7 +126,7 @@ class SearchView():
             'size': openapi.Schema(type=openapi.TYPE_INTEGER, description='size', example=20),
             'sort_order': openapi.Schema(type=openapi.TYPE_STRING, description='sort_order', example="DESC"),
             # 'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2022-05-27T12:48:07.256Z", format="YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]"),
-            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2021 01-01 00:00:00", format="YYYY-MM-DD HH:MM:ss"),
+            'start_date': openapi.Schema(type=openapi.TYPE_STRING, description='start_date', example="2021-01-01 00:00:00", format="YYYY-MM-DD HH:MM:ss"),
         }),
         # responses={200: Schema(type=TYPE_OBJECT)})
         responses={
@@ -133,14 +141,12 @@ class SearchView():
         try:
             # print(request.data)
             request_json = request.data
-            # tutorial_data = JSONParser().parse(request)
-            # print('request : {}'.format(json.dumps(request_json, indent=2)))
-            logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
+            # logger.info('get_es_search : {}'.format(json.dumps(request_json, indent=2)))
             response = SearchOmniHandlerInject.search(QueryBuilderInject, request_json)
             return JsonResponse({'message' : response}, status=200)
         except Exception as e:
             logger.error(e)
-            return JsonResponse({'message' : str(e)}, status=500)
+            return Response({'message' : str(e)}, status=500)
             
             
     @api_view(["GET",])
@@ -150,17 +156,19 @@ class SearchView():
             return Response({'message' : 'Get: hello, search world!'})
         except Exception as e:
             logger.error(e)
-            return JsonResponse({'message' : str(e)}, status=500)
+            return Response({'message' : str(e)}, status=500)
                 
             
             
 # --
 # REST API : CRUD Custom URL Patterns to this class
 # https://walkingplow.tistory.com/25
-class userRankView(APIView):
+class userRankView(GenericAPIView):
     """
     Custom REST API GET, PUT, DELETE, POST
     """
+    
+    serializer_class = userRankSerializer
 
     @swagger_auto_schema(tags=['userank'], operation_summary="userank GET", method='GET', responses={200: Schema(type=TYPE_OBJECT)})
     @api_view(["GET",])

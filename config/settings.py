@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from .settings_dev import *
-from .settings_prod import *
+# from .settings_dev import *
+# from .settings_prod import *
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -62,7 +62,8 @@ INSTALLED_APPS = [
     # --
     "rest_api",
     'book_rest_api',
-    "rest_ui" 
+    "rest_ui",
+    "rest_second_api", 
 ]
 
 MIDDLEWARE = [
@@ -187,6 +188,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+# Resolve the path using whitenoise library
 
 STATIC_URL = "static/"
 import os

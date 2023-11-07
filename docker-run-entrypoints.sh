@@ -11,7 +11,9 @@ cd /app/FN-Django-Services
 # poetry run python ./search-indexing-script.py --es $ES_HOST
 # poetry run uvicorn main:app --reload --port=7000 --workers 4
 # poetry run python manage.py runserver 9999
-poetry run gunicorn -w 2 --bind 0:9999 config.wsgi:application
+
+export DJANGO_SETTINGS_MODULE="config.settings_prod"
+poetry run gunicorn -w 4 --bind 0:9999 config.wsgi:application
 
 # --
 # Conda v.

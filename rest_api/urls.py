@@ -31,9 +31,10 @@ from .views_test import (
 from .router import router
  # --
 
+app_name = 'rest_api_app'
 urlpatterns = [
 
-    path('test', TestView.as_view(), name='test1'),
+    path('test', TestView.as_view(), name='test_api'),
     
     # path('Note', get_note, name='Note'),
     # path('Note/<int:pk>', get_note_joined, name='Note'),
@@ -71,7 +72,7 @@ urlpatterns = [
     path('userRank/', userRankView.post_params_api, name='userRank'),
     # --
     
-    path('users', RestapiView.as_view(), name='rest_api'),
+    path('users', RestapiView.as_view(), name='users'),
     # path('users/<str:obj_id>', RestapiView.as_view(), name='rest_api'),
     
     # path('student-date-joined/<int:pk>', get_student_date_joined, name='get-student-date-joined'), # new line

@@ -1,7 +1,29 @@
-from django.db import models
+from djongo import models
+
+# ----------------------------------------
+# Mongo Models
+
+class Log(models.Model):
+    _id = models.ObjectIdField()
+    message = models.TextField(max_length=1000)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        _use_db = 'mongo_db'
+        ordering = ("-created_at", )
+
+    def __str__(self):
+        return self.messag
+
+
+
+
+# ----------------------------------------
+# Django Models
 
 # Create your models here.
-
 class userRank(models.Model):
     username = models.CharField(max_length=30, primary_key=True)
     deposit = models.IntegerField(default=1000000)
@@ -9,14 +31,14 @@ class userRank(models.Model):
     # age = models.PositiveIntegerField(null=True)
     
     class Meta:
-        managed = False
-        db_table = 'userank'
+        # managed = False
+        db_table = 'userrank'
         
     def __str__(self) -> str:
         return f"{self.username, self.deposit, self.earning_rate}"
     
     def json(self):
-        return {'username':str(self.username)}
+        return {'username':self.username, 'deposit' : self.deposit, 'earning_rate' : self.earning_rate}
     
 
 # Create your models here.
@@ -34,7 +56,7 @@ class Student(models.Model):
     # human = models.ForeignKey('userRank', on_delete = models.CASCADE)
     
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'student'
 
     def __str__(self) -> str:
@@ -42,5 +64,43 @@ class Student(models.Model):
         return f"{self.name, self.grade, self.age}"
     
     def json(self):
-        return {'name':str(self.name)}
+        return {'name':self.name, 'grade' : self.grade, 'age' : self.age, 'home_address' : self.home_address, 'gender' : self.gender}
 
+
+
+class Sessions(models.Model):
+    sessionId = models.AutoField(primary_key=True)
+    
+    class Meta:
+        # managed = False
+        db_table = 'sessions'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.sessionId}"
+
+
+class Ip(models.Model):
+    ipId = models.AutoField(primary_key=True)
+    
+    class Meta:
+        # managed = False
+        db_table = 'ip'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.ipId}"
+
+
+class Affiliation(models.Model):
+    affiliationId = models.AutoField(primary_key=True)
+    ip = models.ForeignKey("Ip", null=False, db_column="ipId", on_delete=models.CASCADE)
+    session = models.ForeignKey("Sessions", null=False, db_column="sessionId", on_delete=models.CASCADE)
+    
+    class Meta:
+        # managed = False
+        db_table = 'affiliation'
+        
+    def __str__(self) -> str:
+        # return self.name
+        return f"{self.affiliationId, self.ip, self.session}"

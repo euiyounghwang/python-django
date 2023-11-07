@@ -50,6 +50,9 @@ poetry add djangorestframework
 # For Swqgger
 poetry add django-rest-swagger
 poetry add drf-yasg
+poetry add django-cors-headers
+poetry add django-prometheus
+poetry add pytest-django
 ```
 
 Add 'rest_framework' to your INSTALLED_APPS setting.
@@ -202,8 +205,101 @@ systemctl status django-gunicorn.service
 ● django-gunicorn.service - 
 ```
 
-Docker Build & Run/Pytest
+Docker Build & Run/Pytest : Docker build for running service & pytest through docker-compose.yml
 
 ![Alt text](./screenshots/Django-Docker-Compose-Build.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Run.png)
 ![Alt text](./screenshots/Django-Docker-Compose-Pytest.png)
+
+Pytest (<i>poetry run pytest -v rest_api/tests</i>)
+- [pytest] DJANGO_SETTINGS_MODULE = config.settings_dev for Dev Environment
+- poetry run pytest -v rest_api/tests --junitxml=test-reports/junit/pytest.xml --cov-report html --cov
+
+```bash
+platform darwin -- Python 3.9.7, pytest-7.4.3, pluggy-1.3.0 -- /Users/euiyoung.hwang/ES/Python_Workspace/python-django/.venv/bin/python
+cachedir: .pytest_cache
+django: settings: config.settings_dev (from ini)
+rootdir: /Users/euiyoung.hwang/ES/Python_Workspace/python-django/rest_api/tests
+configfile: pytest.ini
+plugins: cov-4.1.0, django-4.5.2
+collected 12 items                                                                                                                         
+
+rest_api/tests/test_build_query.py::test_build_skip SKIPPED (no way of currently testing this)                                       [  8%]
+rest_api/tests/test_build_query.py::test_build_terms[_term0] PASSED                                                                  [ 16%]
+rest_api/tests/test_build_query.py::test_build_terms_batch PASSED                                                                    [ 25%]
+rest_api/tests/test_elasticsearch.py::test_search_skip SKIPPED (no way of currently testing this)                                    [ 33%]
+rest_api/tests/test_elasticsearch.py::test_elasticsearch PASSED                                                                      [ 41%]
+rest_api/tests/test_elasticsearch.py::test_indics_analyzer_elasticsearch PASSED                                                      [ 50%]
+rest_api/tests/test_rest_api.py::test_api_skip SKIPPED (no way of currently testing this)                                            [ 58%]
+rest_api/tests/test_rest_api.py::test_api_test_swagger PASSED                                                                        [ 66%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[1] PASSED                                                                    [ 75%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[2] PASSED                                                                    [ 83%]
+rest_api/tests/test_rest_api.py::test_api_users_swagger[3] PASSED                                                                    [ 91%]
+rest_api/tests/test_rest_api.py::test_api_es_search_swagger PASSED                                                                   [100%]
+```
+
+HTTP Response status codes (<i>https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204</i>)
+```http
+100 Continue
+101 Switching Protocols
+102 Processing
+103 Early Hints
+Experimental
+200 OK
+201 Created
+202 Accepted
+203 Non-Authoritative Information
+204 No Content
+205 Reset Content
+206 Partial Content
+207 Multi-Status
+208 Already Reported
+226 IM Used
+300 Multiple Choices
+301 Moved Permanently
+302 Found
+303 See Other
+304 Not Modified
+307 Temporary Redirect
+308 Permanent Redirect
+400 Bad Request
+401 Unauthorized
+402 Payment Required
+403 Forbidden
+404 Not Found
+405 Method Not Allowed
+406 Not Acceptable
+407 Proxy Authentication Required
+408 Request Timeout
+409 Conflict
+410 Gone
+411 Length Required
+412 Precondition Failed
+413 Content Too Large
+414 URI Too Long
+415 Unsupported Media Type
+416 Range Not Satisfiable
+417 Expectation Failed
+418 I'm a teapot
+421 Misdirected Request
+422 Unprocessable Content
+423 Locked
+424 Failed Dependency
+425 Too Early
+426 Upgrade Required
+428 Precondition Required
+429 Too Many Requests
+431 Request Header Fields Too Large
+451 Unavailable For Legal Reasons
+500 Internal Server Error
+501 Not Implemented
+502 Bad Gateway
+503 Service Unavailable
+504 Gateway Timeout
+505 HTTP Version Not Supported
+506 Variant Also Negotiates
+507 Insufficient Storage
+508 Loop Detected
+510 Not Extended
+511 Network Authentication Required
+```

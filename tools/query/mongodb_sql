@@ -1,0 +1,237 @@
+use test
+use user_interactivity_db
+
+// Table 생성
+db.createCollection("user_interactivity_result")
+db.createCollection("user_interactivity_log")
+
+db.employees.stats()
+
+// table 이름 변경
+db.employees.renameCollection("emp")
+
+db.emp.drop()
+db.employees.drop()
+db.book.drop()
+
+// 데이터베이스의 논리적 저장구조인 테이블에 해당되는 데이터 구조를 MongoDB에서는 Collection으로 표현
+show collections
+
+show dbs
+
+// http://winmargo.tistory.com/182
+db.book.insert({ "name": "MongoDB Tutorial2", "author": "velopert2" });
+
+db.getCollection("book").insert({
+    "name": "MongoDB Tutorial1q11112",
+    "author": "velopert1111112"
+});
+
+// 컬렉션의 다큐먼트 리스트를 확인할때는 db.COLLECTION_NAME.find() 명령어를 사용하세요.
+db.articles.find().pretty()
+
+
+db.book.remove({});
+db.user_interactivity_result.remove({});
+db.user_interactivity_log.remove({});
+
+db.user_interactivity_result.find({ name: "John" });
+
+//업데이트를 치면(upsert를 true를 줬으나 데이터가 있기 때문에 update)
+db.user_interactivity_result.update({"idx":1}, {$set : {"name":"eastluck"}}, true);
+
+// 특정필드 제거하기
+// db.people.update( { name: "David" }, { $unset: { score: 1 } } )
+
+// Abet document 의 age를 20으로 변경한다
+// db.people.update( { name: "Abet" }, { $set: { age: 20 } } )
+
+db.user_interactivity_result.remove({'source_tag':'S'});
+db.user_interactivity_result.remove({'source_tag':'W'});
+
+
+db.user_interactivity_result.find();
+db.user_interactivity_log.find().pretty();
+db.user_interactivity_log.find().pretty().count();
+
+db.user_interactivity_log.find({'source_tag':'S'});
+db.user_interactivity_log.find({'source_tag':'R'});
+db.user_interactivity_log.find({'source_tag':'W'});
+db.user_interactivity_log.find({'source_tag':'H'});
+db.user_interactivity_log.find({'mail_id':'euiyoung.hwang'}, {_id:0});
+
+db.user_interactivity_log.find({'company_code':'01'}).count()
+db.user_interactivity_log.find({'company_code':'30'}).count()
+
+db.user_interactivity_log.find({'company_code':'01'});
+db.user_interactivity_log.find({'company_code':'30'});
+
+
+// paging
+// db.users.find().skip(pagesize*(n-1)).limit(pagesize)
+db.user_interactivity_log.find({'company_code':'01'}).limit(10);
+db.user_interactivity_log.find({'company_code':'01'}).skip(1).limit(2);
+
+db.user_interactivity_log.find({'company_code':'01', 'mail_id':'euiyoung.hwang'});
+db.user_interactivity_log.find({'company_code':'01', 'mail_id':'jinha.jeong'});
+db.user_interactivity_log.find({'company_code':'01', 'emp_no':'271610'}).skip(0).limit(100);
+
+
+// db.users.find().skip(pagesize*(n-1)).limit(pagesize)
+db.user_interactivity_log.find({'company_code':'01', 'mail_id':'euiyoung.hwang'}).skip(0).limit(100);
+
+db.user_interactivity_log.find({'company_code':'01'}).skip(0).limit(15);
+db.user_interactivity_log.find({'company_code':'01', 'emp_no':'292417'}).count();
+db.user_interactivity_log.find({'company_code':'01', 'emp_no':'290854'}).skip(0).limit(1000);
+
+// http://winmargo.tistory.com/182
+db.user_interactivity_result.find();
+db.user_interactivity_log.find({'emp_no':'292816'});
+db.user_interactivity_result.find({'emp_no':'292816'});
+
+
+db.user_interactivity_log.find({'company_code':'01', 'tracking_tf_idf_result': { $exists: true }});
+db.user_interactivity_log.find({'company_code':'30', 'tracking_tf_idf_result': { $exists: true }});
+
+db.user_interactivity_log.find({'company_code':'01'}).pretty();
+db.user_interactivity_log.find({'company_code':'30'}).pretty();
+
+db.test.find();
+//업데이트를 치면(upsert를 true를 줬으나 데이터가 있기 때문에 update)
+db.test.update({"emp_no":"292816"}, {'$set': {'tracking_tf_idf_result': [('포스코IT사업부', -0.3010299956639812)]}}, false);
+db.test.update({"emp_no":"292816"}, {'$set': {'tracking_tf_idf_result': [['포스코IT사업부', -0.3010299956639812]]}}, false);
+
+
+//업데이트를 치면(upsert를 true를 줬으나 데이터가 있기 때문에 update)
+db.user_interactivity_result.update({"idx":1}, {$set : {"name":"eastluck"}}, true);
+
+// iamveryhappy
+db.user_interactivity_log.find({'emp_no':'597694'});
+db.user_interactivity_log.find({'emp_no':'597694', 'company_code':'30'});
+
+// smarty210
+db.user_interactivity_log.find({'emp_no':'611375', 'company_code':'30'});
+db.user_interactivity_log.find({'emp_no':'611375'});
+
+//Double quotes quote object names (e.g. "field"). Single quotes are for strings 'string'
+mb.runSQLQuery(`
+
+       SELECT * FROM user_interactivity_result
+
+`).sort({ _id: -1 })
+    .limit(1000);
+
+
+//Double quotes quote object names (e.g. "field"). Single quotes are for strings 'string'
+mb.runSQLQuery(`
+
+       SELECT * FROM user_interactivity_log WHERE mail_id like 'euiyoung.hwang' and source_tag = 'S'
+
+`).sort({ _id: -1 })
+    .limit(1000);
+
+
+db.user_interactivity_result.find({ "creation_date" : {"$gte": new Date("2014-12-24T00:00:00.000Z"),"$lte": new Date("2018-12-07T00:00:00.000Z")});
+db.user_interactivity_result.find({ "source_date" : {"$gte": new Date("2014-12-24T00:00:00.000Z"),"$lte": new Date("2018-12-07T00:00:00.000Z")});
+
+//Double quotes quote object names (e.g. "field"). Single quotes are for strings 'string'
+mb.runSQLQuery(`
+
+       SELECT * FROM user_interactivity_result WHERE mail_id like 'euiyoung.hwang' and source_tag = 'S' and (creation_date > date('20031120', 'YYYYMMDD') and creation_date < date('20181208', 'YYYYMMDD'))
+`).sort({ _id: -1 })
+    .limit(1000);
+
+
+//Double quotes quote object names (e.g. "field"). Single quotes are for strings 'string'
+mb.runSQLQuery(`
+
+       SELECT * FROM user_interactivity_result WHERE name like 'viola'
+
+`).sort({ _id: -1 })
+    .limit(1000);
+
+
+
+# -*- coding: utf-8 -*-
+import pymongo
+import sys
+import datetime
+
+# http://www.fun-coding.org/mongodb_basic5.html
+
+# conn = pymongo.MongoClient('172.31.142.62', 27017)
+# db = conn.get_database()('user_interactivity_db')
+# collection = db.get_collection('book')
+#
+# collection_list = db.collection_name()
+# print(collection_list)
+
+
+# client = pymongo.MongoClient("mongodb://elastic:gsaadmin@172.31.142.62:27017")
+# db = client.user_interactivity_db
+# collection = db.books
+myclient = pymongo.MongoClient("mongodb://elastic:gsaadmin@172.31.142.62:27017/")
+mydb = myclient["user_interactivity_db"]
+mycol = mydb["user_interactivity_result"]
+
+doc = [
+  # { "_id": 1, "name": "John", "address": "Highway 37"},
+  # { "_id": 2, "name": "Peter", "address": "Lowstreet 27"},
+  # { "_id": 3, "name": "Amy", "address": "Apple st 652"},
+  # { "_id": 4, "name": "Hannah", "address": "Mountain 21"},
+  # { "_id": 5, "name": "Michael", "address": "Valley 345"},
+  # { "_id": 6, "name": "Sandy", "address": "Ocean blvd 2"},
+  # { "_id": 7, "name": "Betty", "address": "Green Grass 1"},
+  # { "_id": 8, "name": "Richard", "address": "Sky st 331"},
+  # { "_id": 9, "name": "Susan", "address": "One way 98"},
+  # { "_id": 10, "name": "Vicky", "address": "Yellow Garden 2"},
+  # { "_id": 11, "name": "Ben", "address": "Park Lane 38"},
+  # { "_id": 12, "name": "William", "address": "Central st 954"},
+  # { "_id": 13, "name": "Chuck", "address": "Main Road 989"},
+  # { "_id": 14, "name": "Viola", "address": "Sideway 1633"},
+  {"emp_no": "292816", "mail_id": "euiyoung.hwang", "company_code": "201908"}
+]
+# doc = {"_id":"myid11","firstname":"tony","lastname":"eui", "date": datetime.datetime.utcnow()}
+
+
+# data = list()
+# data.append({"_id": '292816', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928161', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928162', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928163', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928164', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928165', "name": "John", "address": "Highway 37"})
+# data.append({"_id": '2928166', "name": "John", "address": "Highway 37"})
+# # test_insert_collection.insert_many(data)
+# for result in test_insert_collection.find():
+#     print(result)
+
+import datetime
+import time
+
+try:
+    # date1 = "2018-04-28 00:37:50"
+    # date_time_obj = datetime.datetime.strptime(date1, '%Y-%m-%d %H:%M:%S')
+    # print('Date-time:', date_time_obj)
+    doc1 = {'company_code': '201908'}
+    # conn = mycol.mongodb_get_connection()
+    post_id = mycol.remove(doc1)
+    # print(post_id[0])
+
+    # post_id = mycol.insert(doc)
+    # print(post_id)
+
+    # doc = [{"emp_no": "292816", "mail_id": "euiyoung.hwang", "company_code": "201908"}]
+    # print(doc)
+
+    # post_id = mycol.insert_many(data)
+    # print(post_id.inserted_ids, mycol.count())
+
+    # for result in mycol.find():
+    #     print(result)
+
+    # for post in test_collection.find({"author":"Mike"}).sort("_id"):
+    #     print(post)
+except:
+     print("insert failed", sys.exc_info()[0])
+

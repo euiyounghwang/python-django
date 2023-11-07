@@ -15,7 +15,8 @@ source .venv/bin/activate
 
 # -- NginX + Gunicorn for Prod
 # https://wikidocs.net/6601
-poetry run gunicorn -w 2 --bind 0:9999 config.wsgi:application
+export DJANGO_SETTINGS_MODULE="config.settings_prod"
+poetry run gunicorn -w 4 --bind 0:9999 config.wsgi:application
 
 # Create project
 # python manage.py startapp rest_api

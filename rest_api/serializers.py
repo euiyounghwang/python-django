@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Student, userRank
+from .models import Student, userRank, Ip
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +10,9 @@ class StudentSerializer(serializers.ModelSerializer):
 class userRankSerializer(serializers.ModelSerializer):
     class Meta:
         model = userRank
+        fields = "__all__"
+        
+class IpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ip
         fields = "__all__"

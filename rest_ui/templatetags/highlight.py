@@ -5,6 +5,10 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 
+@register.filter
+def modulo(num, val):
+    return num % val
+
 @register.filter()
 def highlight_yellow(text, value):
     if text is not None:

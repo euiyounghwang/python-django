@@ -10,18 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/loading.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pagination.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/autocomplete.css' %}"> -->
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <!-- <script type="text/javascript" src="{% static 'script/autocomplete.js' %}"></script> -->
     <style>
         .main {
             width: 100%;
         }
 
         .book {
-            border: 2px solid #d0cdcd;
+            border: 2px solid #eeeaead2;
+            background-color: #ffffff;
             font-size: 13px;
             border-radius: 5px;
             margin-bottom: 5px;
             padding: 5px;
+            /* width: 300px; */
         }
 
         .author {
@@ -39,6 +44,7 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
+      /* background-color: #7878785e; */
     }
     
     .topnav {
@@ -114,54 +120,89 @@
         $(".loader").fadeOut("slow");
     })
     </script>
+    <script>
+      // var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua &amp; Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia &amp; Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre &amp; Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts &amp; Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad &amp; Tobago","Tunisia","Turkey","Turkmenistan","Turks &amp; Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+      // autocomplete(document.getElementById("myInput"), countries);
+    </script>
 </head>
-<body>
+<body class="body">
 <!-- loading.imgage -->
 <div class="loader"></div>
+<script>
+  function goPage(keyword, token, direction) {
+    var f = document.paging;
+
+    f.keyword.value = keyword;
+    f.pit.value = token;
+    f.direction.value = direction;
+
+    f.action = "./search"
+
+    // 전송 방식 : post
+    f.method = "post"
+    f.submit();
+  };
+</script>
 <div class="main">
     <!-- http://localhost:9999/rest_ui/search -->
     <div class="topnav">
         <a class="active" href=".">Home</a>
         <a href="#about">Django-UI</a>
         <div class="search-container">
-          <form action="search" method="get">
-            <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
+          <form action="search" method="post" name="paging">
+            <!-- <div class="autocomplete" style="width:250px;"> -->
+              <input type="text" value="{% if keyword %}{{ keyword }}{%endif%}" name="keyword">
+            <!-- </div> -->
+            <input type="hidden" value="" name="pit">
+            <input type="hidden" value="" name="direction">
             <button type="submit"><i class="fa fa-search"></i></button>
           </form>
         </div>
     </div>
     {% if response %}
     <p align='right'>Search Results.. : <b>{{ total | intcomma}}</b> docs..</p>
+    <!--Pagination-->
+    
+    <p align="center">
+        <!-- <a href="?page=1">&laquo; first</a> -->
+        <!-- <a href="?page={{ movies.previous_page_number }}">previous</a> -->
+        <!-- <a href="javascript:goPage('{{ keyword }}', '{{ pit_token }}', 'left');">Previous</a> -->
+        <span class="current">
+                    Page 
+        </span>
+
+        <!-- <a href="search?keyword={{keyword}}&pit={{ pit_token }}">next</a> -->
+        <a href="javascript:goPage('{{ keyword }}', '{{ pit_token }}', 'right');">Next</a>
+        <!-- <a href="?page={{ movies.paginator.num_pages }}">&raquo;</a> -->
+    </p>
+      <!--end of Pagination-->
+    <!-- {{ aggs }} -->
+    <!-- <div style="height: 100px;">
+      <p>
+      {% for agg in aggs %}
+        {% for each_genre in agg.genre.buckets %}
+          {{ each_genre.key}} <a href="#">({{ each_genre.doc_count}})</a>
+        {% endfor %}    
+      {% endfor %}
+      </p>
+    </div> -->
     {% for hit in response %}
-        <div class="book">
-            <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
-            <p>{{ hit.source.plot | slice:500 }}..</p>
-            {% for k, v in hit.highlight.items %}
-            <p>{{ k}} - {{ v.0 | safe | highlight_yellow:keyword}}</p>
-            {% endfor %}        
-            <p class="author">Author: {{ hit.source.director }}</p>
-            <p class="author"><b>Score: {{ hit.score }}</b></p>
-        </div>
+    <div class="book">
+      <h2><a href={{ hit.source.wiki_page }} target='_blank'>{{ hit.source.title }}</a></h2>
+      <p>Genre: <b>{{ hit.source.genre }}</b></p>
+      <p>{{ hit.source.plot | slice:500 }}..</p>
+      {% for k, v in hit.highlight.items %}
+      <p>{{ k}} - {{ v.0 | safe | highlight_yellow:keyword}}</p>
+      {% endfor %}        
+      <p class="author">Author: {{ hit.source.director }}</p>
+      <p class="author"><b>Score: {{ hit.score }}</b></p>
+    </div>
     {% endfor %}
     {% else %}
     <p align='right'>Search Results.. : <b>{{ total }}</b> docs..</p>
     {% endif %}
 </div>
 <br/>
-{% if response %}
- <!--Pagination-->
- <p align="center">
-     <!-- <a href="?page=1">&laquo; first</a> -->
-    <a href="?page={{ movies.previous_page_number }}">previous</a>
-         
-    <span class="current">
-                Page 
-    </span>
 
-    <a href="?page={{ movies.next_page_number }}">next</a>
-    <!-- <a href="?page={{ movies.paginator.num_pages }}">last &raquo;</a> -->
-</p>
-  <!--end of Pagination-->
-  {% endif %}
 </body>
 </html>

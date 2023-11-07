@@ -3,6 +3,78 @@ version: '3'
 name: python-django-api
 services:
   
+  rabbitmq:
+    # There is a prebuilt RabbitMQ image; see
+    # https://hub.docker.com/_/rabbitmq/ for details.
+    # This variant is built on Alpine Linux (it's smaller) and includes
+    # the management UI.
+    image: 'rabbitmq:3.6-management-alpine'
+
+    # These ports are exposed on the host; 'hostport:containerport'.
+    # You could connect to this server from outside with the *host's*
+    # DNS name or IP address and port 5672 (the left-hand side of the
+    # colon).
+    ports:
+      # The standard AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+
+    # Run this container on a private network for this application.
+    # This is necessary for magic Docker DNS to work: other containers
+    # also running on this network will see a host name "rabbitmq"
+    # (the name of this section) and the internal port 5672, even though
+    # that's not explicitly published above.
+    networks:
+      - bridge
+
+  cache:
+    image: redis:6.2-alpine
+    container_name: redis-local
+    restart: always
+    ports:
+      - '6379:6379'
+    # command: redis-server --save 20 1 --loglevel warning --requirepass MTIzNA==
+    volumes: 
+      - cache:/data
+    networks:
+      - bridge
+  
+  # MongoDB is a NoSQL database service with seamless performance and options for scaling. It uses a JSON-like storage model and doesn’t require a predefined database schema. 
+  # docker run -d -p 27017:27017 --name mongo-local -e MONGO_INITDB_ROOT_USERNAME=postgres -e MONGO_INITDB_ROOT_PASSWORD=1234 mongo:latest
+  mongo:
+    image: mongo
+    container_name: mongo-local
+    ports:
+      - '27017:27017'
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=postgres
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=test
+    networks:
+      - bridge
+ 
+        
+  # docker run --name postgres-local -e POSTGRES_PASSWORD=1234 -p 15432:5432 -d postgres
+  postgres:
+    image: postgres
+    container_name: postgres-local
+    ports:
+      - 15432:5432
+    restart: always
+    volumes:
+      # - ./backup:/var/lib/postgresql/data
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgres
+    networks:
+      - bridge
+      
   fn-django-search-api:
     image: fn-django-search-api:es
     container_name: fn-django-search-api
@@ -48,6 +120,9 @@ services:
     networks:
       - bridge
 
+volumes:
+  cache:
+    driver: local
 networks:
   bridge:
     driver: bridge

@@ -58,6 +58,8 @@ class QueryBuilder:
                     "query": oas_query.get('query_string')
                 }
             }
+        return self.query_string
+
 
     def add_highlighting(self):
         self.highlight_clauses = {
@@ -83,18 +85,20 @@ class QueryBuilder:
 
     def add_pagination(self, search_after=None):
         if search_after is not None:
-            self.logger.warn('Not none for search after')
+            self.logger.warn('add_pagination - Not none for search after')
             self.es_query['search_after'] = search_after
         else:
-            self.logger.warn('None for search after')
+            self.logger.warn('add_pagination - None for search after')
+            
+        return search_after
 
     def add_aggregations(self, oas_query=None):
         if oas_query.get("include_basic_aggs"):
             aggs_clauses = {
                 "aggs": {
-                    "bill_type": {
+                    "genre": {
                         "terms": {
-                            "field": "bill_type.keyword",
+                            "field": "genre.keyword",
                             "size": 150000
                         }
                     }
@@ -104,7 +108,44 @@ class QueryBuilder:
             self.es_query.update(aggs_clauses)
 
     
-    def build_terms_filters_batch(self, _terms, max_terms_count=65000):
+    def build_term_filter(self, filter_list, op):
+        # accumulate a list of all conditions for this filter nesting level
+        conditions = []
+
+        for filter in filter_list:
+            if filter.get('fieldname', None) is not None:
+                # a plain terms clause. add its field name and values.
+                term = filter['fieldname']
+                values = filter.get('values', [])
+                conditions.append({
+                    'bool': {
+                        'filter': {
+                            'terms': {
+                                term : values
+                            }
+                        }
+                    }
+                })
+            elif filter.get('or'):
+                conditions.append(
+                    self.build_term_filter(filter['or'], 'should')
+                )
+            elif filter.get('and'):
+                conditions.append(
+                    self.build_term_filter(filter['and'], 'must')
+                )
+            elif filter.get('not'):
+                conditions.append(
+                    self.build_term_filter(filter['not'], 'must_not')
+                )
+
+        return {
+            'bool': {
+                op: conditions
+            }
+        }
+        
+    def build_terms_filters_batch(self, fieldname, _terms, max_terms_count=65000):
         ''' The logic to separate terms clauses based on max_terms_count '''
         
         if len(_terms) < 2 and "*" in _terms:
@@ -114,7 +155,7 @@ class QueryBuilder:
         terms_chunks = [_terms[i: i + max_terms_count] for i in range(0, len(_terms), max_terms_count)]
         print(terms_chunks)
         for _chunks in terms_chunks:
-            terms_filters.append({"terms": {"_id": _chunks}})
+            terms_filters.append({"terms": {fieldname: _chunks}})
 
         return terms_filters
     
@@ -125,14 +166,15 @@ class QueryBuilder:
 
         # self.logger.info('QueryBuilder:oas_query_params - {}'.format(oas_query))
 
-        self.transform_query_string(oas_query)
-        self.must_clauses = [self.query_string]
+        self.must_clauses = [self.transform_query_string(oas_query)]
         self.filter_clauses = [{
             "bool": {
                 "must": [
                     {
                         "bool": {
-                            "should": self.build_terms_filters_batch(_terms=oas_query.get("ids_filter",[]), max_terms_count=1000)
+                            "should": self.build_terms_filters_batch(fieldname='genre',
+                                                                    _terms=oas_query.get("ids_filter",[]), 
+                                                                     max_terms_count=1000)
                         }
                     }
                 ]
