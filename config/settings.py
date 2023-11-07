@@ -62,7 +62,8 @@ INSTALLED_APPS = [
     # --
     "rest_api",
     'book_rest_api',
-    "rest_ui" 
+    "rest_ui",
+    "rest_second_api", 
 ]
 
 MIDDLEWARE = [

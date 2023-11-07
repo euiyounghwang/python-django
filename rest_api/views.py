@@ -146,7 +146,7 @@ class SearchView():
             return JsonResponse({'message' : response}, status=200)
         except Exception as e:
             logger.error(e)
-            return JsonResponse({'message' : str(e)}, status=500)
+            return Response({'message' : str(e)}, status=500)
             
             
     @api_view(["GET",])
@@ -156,7 +156,7 @@ class SearchView():
             return Response({'message' : 'Get: hello, search world!'})
         except Exception as e:
             logger.error(e)
-            return JsonResponse({'message' : str(e)}, status=500)
+            return Response({'message' : str(e)}, status=500)
                 
             
             
