@@ -3,6 +3,8 @@ import sys
 import datetime
 from pymongo import MongoClient
 import json
+import argparse
+from Search_Engine import Search
 
 
 class Databases():
@@ -64,7 +66,23 @@ def get_db_connection():
 
      
 if __name__ == "__main__":
-   
+    
+    ''' 
+        Run (Mongo DB Select and Indexing into Elasticsearch, Scripts)
+        poetry run python ./tools/Search-pymongo-db-script.py --es=http://localhost:9209  --index=search_indexing-db 
+        poetry run python ./search-pymongo-db-script.py --es $ES_HOST --DATABASE_URL $DATABASE_URL --index $INDEX_NAME (Docker Based)
+    '''
+    parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
+    parser.add_argument('-e', '--es', dest='es', default="http://localhost:9209", help='host target')
+    parser.add_argument('-i', '--index', dest='index', default="search_indexing-db", help='host target')
+    args = parser.parse_args()
+    
+    if args.es:
+        es_host = args.es
+        
+    if args.index:
+        es_index_name = args.index
+        
     try:
          # Inserting document into a collection
         '''
