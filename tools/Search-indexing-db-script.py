@@ -111,31 +111,21 @@ class Search():
             print('Error: {}, index: {}'.format(error, _index))
 
 
-    def buffered_json(self, df, index):
+    def buffered_json(self, df, _index):
         print("buffer_indexing_mode_run Loading..")
         print(df)
-        # actions = []
-        # for i, row in df.iterrows():
-        #     doc = {
-        #         "title": row["Title"],
-        #         "ethnicity": row["Origin/Ethnicity"],
-        #         "director": row["Director"],
-        #         "cast": row["Cast"],
-        #         "genre": row["Genre"],
-        #         "plot": row["Plot"],
-        #         "year": row["Release Year"],
-        #         "wiki_page": row["Wiki Page"]
-        #     }
-
-        #     # actions.append({'index': {'_index': _index, '_id': i}})
-        #     actions.append({'index': {'_index': _index}})
-        #     actions.append(doc)
-
-        #     if Get_Buffer_Length(actions) > MAX_BYTES:
-        #         response = es.bulk(body=actions)
-        #         print("** indexing ** : {}".format(json.dumps(response, indent=2)))
-        #         del actions[:]
-
+        actions = []
+       
+        # creating a list of dataframe columns 
+        columns = list(df) 
+        for row in list(df.values.tolist()):
+            rows_dict = {}
+            for i, colmun_name in enumerate(columns):
+                rows_dict.update({colmun_name : row[i]})
+            # print(rows_dict)
+            actions.append({'index': {'_index': _index}})
+            actions.append(rows_dict)
+        print(json.dumps(actions, indent=2))
 
 
 def get_db_connection():
@@ -204,13 +194,13 @@ if __name__ == "__main__":
             for row in rows:
                 for k, v in row.items():
                     print({k : v})
+            We can make the same way using Dataframe after convert df to json
             '''
-            es_client.buffered_json(df=pd.DataFrame.from_dict(rows), index=es_index_name)
+            es_client.buffered_json(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
         
         
         # es_client.create_index(_index=es_index_name)
-        
-            
+                   
     except Exception as e:
         print("Connection - {}".format(str(e)))
         
