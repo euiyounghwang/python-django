@@ -14,8 +14,6 @@ import pandas as pd
 
 load_dotenv()
 
-MAX_BYTES = 1048576
-
 
 class Databases():
     
@@ -54,6 +52,7 @@ class Search():
     
     def __init__(self, host):
         self.timeout = 60
+        self.MAX_BYTES = 1048576
         self.es_client = Elasticsearch(hosts=host, headers=self.get_headers(), timeout=self.timeout)
     
     
@@ -110,10 +109,25 @@ class Search():
         except Exception as error:
             print('Error: {}, index: {}'.format(error, _index))
 
+    
+    def post_search(self, _index):
+        ''' search after indexing as validate '''
+        response = self.es_client.search(
+            index=_index,
+            body={
+                    "query" : {
+                       "match_all" : {
+                       }
+                    }
+            }
+        )
+        print("Total counts for search - {}".format(json.dumps(response['hits']['total']['value'], indent=2)))
+        # print("response for search - {}".format(json.dumps(response['hits']['hits'][0], indent=2)))
+    
 
-    def buffered_json(self, df, _index):
-        print("buffer_indexing_mode_run Loading..")
-        print(df)
+    def buffered_json_to_es(self, df, _index):
+        print("buffered_json_to_es Loading..")
+        # print(df)
         actions = []
        
         # creating a list of dataframe columns 
@@ -125,7 +139,21 @@ class Search():
             # print(rows_dict)
             actions.append({'index': {'_index': _index}})
             actions.append(rows_dict)
-        print(json.dumps(actions, indent=2))
+            # print(json.dumps(actions, indent=2))
+            if self.Get_Buffer_Length(actions) > self.MAX_BYTES:
+                response = self.es_client.bulk(body=actions)
+                print("** indexing Error - True/False ** : {}".format(json.dumps(response['errors'], indent=2)))
+                del actions[:]
+        
+        # --
+        # Index for the remain Dataset
+        # --
+        response = self.es_client.bulk(body=actions)
+        print("** Remain indexing Error - True/False ** : {}".format(json.dumps(response['errors'], indent=2)))
+        
+        # --
+        # refresh
+        self.es_client.indices.refresh(index=_index)
 
 
 def get_db_connection():
@@ -160,10 +188,14 @@ if __name__ == "__main__":
     es_client, client = None, None
     try:
         total_size = 0
-        paging_size = 10.0
+        paging_size = 10
         limit_position = 0
+        
         client = Databases()
+        
         es_client = Search(host=es_host)
+        es_client.create_index(_index=es_index_name)
+        
         if client:
             print("Connected successfully!!!")
         
@@ -173,11 +205,12 @@ if __name__ == "__main__":
         if cnt_list and isinstance(cnt_list, list):
             total_size = int(cnt_list[0]['cnt'])
             if total_size > 0:
-                limit_position = int(total_size//paging_size)
-            print('total cnt - {}, limit_position - {}'.format(total_size, limit_position))
+                limit_position = int(round((total_size//paging_size)+0.6))
+            # print('total cnt - {}, limit_position - {}'.format(total_size, limit_position))
             
         ''' offset == size, limit == paging number '''
-        for running_query in range(0, limit_position+1):
+        for running_query in range(0, limit_position):
+            print('Read DB : Retry [{}]'.format(running_query+1))
             rows = client.execute(query='SELECT * from {} LIMIT {} OFFSET {}'.format(
                                     'public.student', 
                                     int(paging_size),
@@ -196,10 +229,10 @@ if __name__ == "__main__":
                     print({k : v})
             We can make the same way using Dataframe after convert df to json
             '''
-            es_client.buffered_json(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
-        
-        
-        # es_client.create_index(_index=es_index_name)
+            es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
+            
+        ''' Check if indesing process works fine '''
+        es_client.post_search(_index=es_index_name)
                    
     except Exception as e:
         print("Connection - {}".format(str(e)))
