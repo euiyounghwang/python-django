@@ -42,6 +42,7 @@ class Search():
         
     def create_index(self, _index):
         print(self.es_client)
+        
         mapping = {
             "mappings": {
                 "properties": {
@@ -58,12 +59,17 @@ class Search():
             }
         }
         
+        def try_delete_index(index):
+            try:
+                if self.es_client.indices.exists(index):
+                    print('Successfully deleted: {}'.format(index))
+                    self.es_client.indices.delete(index)
+            except NotFoundError:
+                pass
+        
+        
         try:
-            if self.es_client.indices.exists(index=_index):
-                self.es_client.indices.delete(index=_index, ignore=[400, 404])
-                print("Successfully deleted: {}".format(_index))
-
-            print('Creating..')
+            try_delete_index(index=_index)
             # now create a new index
             self.es_client.indices.create(index=_index, body=mapping)
             # es_client.indices.put_alias(index, "omnisearch_search")

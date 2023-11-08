@@ -16,7 +16,7 @@ from Search_Engine import Search
 load_dotenv()
 
 
-class Databases():
+class Databases(object):
     
     def __init__(self):
         self.db = psycopg2.connect(os.getenv("DATABASE_URL", "postgresql://postgres:1234@{}:{}/postgres".format("localhost", 15432)))

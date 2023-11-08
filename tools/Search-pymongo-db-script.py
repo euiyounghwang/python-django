@@ -12,7 +12,7 @@ from Search_Engine import Search
 
 load_dotenv()
 
-class Databases():
+class Databases(object):
     
     def __init__(self):
         self.client = MongoClient(os.getenv("DATABASE_URL","mongodb://postgres:1234@localhost:27017/"))
