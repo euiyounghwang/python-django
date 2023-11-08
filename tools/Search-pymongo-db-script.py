@@ -2,6 +2,8 @@
 import sys
 import datetime
 from pymongo import MongoClient
+from pymongo.collation import Collation
+import locale
 import json
 import argparse
 import pandas as pd
@@ -18,7 +20,30 @@ class Databases(object):
         self.client = MongoClient(os.getenv("DATABASE_URL","mongodb://postgres:1234@localhost:27017/"))
     
     
-    def Select(self, db, collection):
+    def create_collection(self, db, collection_name):
+        db = self.client[db]
+        
+        if collection_name in db.list_collection_names():
+            coll = db[collection_name]
+            coll.drop()
+            print("Successfully deleted : {}".format(collection_name))
+            # db.getCollectionInfos({collection_name})[0].options.collation
+            # {
+            #     "locale": "en",
+            #     "caseLevel": True,
+            #     "caseFirst": "off",
+            #     "strength": 2,
+            #     "numericOrdering": false,
+            #     "alternate": "non-ignorable",
+            #     "maxVariable": "punct",
+            #     "normalization": false,
+            #     "backwards": false,
+            #     "version": "57.1"
+            # }
+            
+        coll = db[collection_name]
+    
+    def Get_total_count(self, db, collection, query):
         try:
             rows = []
             #Getting the database instance
@@ -27,9 +52,23 @@ class Databases(object):
             #Creating a collection
             coll = db[collection]
 
-            cursor = coll.find({})
+            return coll.count_documents(query)
+        
+        except Exception as e:
+            print(str(e))
+    
+    def Select(self, db, collection, query, skip, limit):
+        try:
+            rows = []
+            #Getting the database instance
+            db = self.client[db]
+
+            #Creating a collection
+            coll = db[collection]
+
+            cursor = coll.find(query).skip(skip).limit(limit)
             for document in cursor:
-                print(json.dumps(document, indent=2))
+                # print(json.dumps(document, indent=2))
                 rows.append(document)
 
             return rows
@@ -82,6 +121,10 @@ if __name__ == "__main__":
         es_index_name = args.index
         
     try:
+        total_size = 0
+        paging_size = 10
+        limit_position = 0
+        
         client = Databases()
         if client:
             print("Connected successfully!!!") 
@@ -100,13 +143,27 @@ if __name__ == "__main__":
             {"_id": "102", "name": "Rahim", "age": "27", "city": "Bangalore", "addr" : "addr"},
             {"_id": "103", "name": "Robert", "age": "28", "city": "Mumbai"}
         ]
-                        
-        client.Insert(db='local', collection='example', data=data)
-        rows = client.Select(db='local', collection='example')
         
-        # --
-        # Index into ES
-        es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
+        client.create_collection(db='local', collection_name='example')
+        
+        query = {}                
+        # query = {'name' : {"$regex" : 'ra', "$options" : "i"}}
+        client.Insert(db='local', collection='example', data=data)
+        total_size = client.Get_total_count(db='local', collection='example', query=query)
+        print('total_count - {}'.format(total_size))
+        
+        if total_size > 0:
+            limit_position = int(round((total_size//paging_size)+0.6))
+            print('limit_position - {}'.format(limit_position))
+            
+        for running_query in range(0, limit_position):
+            print('Read DB : Retry [{}]'.format(running_query+1))
+            rows = client.Select(db='local', collection='example', query=query, skip=running_query, limit=paging_size)
+            print(json.dumps(rows, indent=2))
+        
+            # --
+            # Index into ES
+            es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
                     
     finally:
         ''' Check if indesing process works fine '''
