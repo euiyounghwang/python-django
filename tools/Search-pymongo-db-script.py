@@ -4,17 +4,23 @@ import datetime
 from pymongo import MongoClient
 import json
 import argparse
+import pandas as pd
+import numpy as np
+from dotenv import load_dotenv
+import os
 from Search_Engine import Search
 
+load_dotenv()
 
 class Databases():
     
     def __init__(self):
-        self.client = MongoClient("mongodb://postgres:1234@localhost:27017/")
+        self.client = MongoClient(os.getenv("DATABASE_URL","mongodb://postgres:1234@localhost:27017/"))
     
     
     def Select(self, db, collection):
         try:
+            rows = []
             #Getting the database instance
             db = self.client[db]
 
@@ -24,7 +30,10 @@ class Databases():
             cursor = coll.find({})
             for document in cursor:
                 print(json.dumps(document, indent=2))
+                rows.append(document)
 
+            return rows
+        
         except Exception as e:
             print(str(e))
      
@@ -53,18 +62,7 @@ class Databases():
         print("Closed successfully!!!") 
 
 
-def get_db_connection():
-    ''' postgres connection '''
-    try: 
-        client = Databases()
-        print("Connected successfully!!!") 
-        return client
-    except Exception as e:
-        print("get_db_connection - {}".format(str(e)))
-        
-       
-
-     
+            
 if __name__ == "__main__":
     
     ''' 
@@ -84,6 +82,13 @@ if __name__ == "__main__":
         es_index_name = args.index
         
     try:
+        client = Databases()
+        if client:
+            print("Connected successfully!!!") 
+            
+        es_client = Search(host=es_host)
+        es_client.create_index(_index=es_index_name)
+            
          # Inserting document into a collection
         '''
             doc1 = {"name": "Ram", "age": "26", "city": "Hyderabad"}
@@ -96,8 +101,15 @@ if __name__ == "__main__":
             {"_id": "103", "name": "Robert", "age": "28", "city": "Mumbai"}
         ]
                         
-        client = get_db_connection()
         client.Insert(db='local', collection='example', data=data)
-        client.Select(db='local', collection='example')
+        rows = client.Select(db='local', collection='example')
+        
+        # --
+        # Index into ES
+        es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
+                    
     finally:
+        ''' Check if indesing process works fine '''
+        es_client.post_search(_index=es_index_name)
+        
         client.close()

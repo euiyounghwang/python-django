@@ -81,9 +81,6 @@ if __name__ == "__main__":
         es_client = Search(host=es_host)
         es_client.create_index(_index=es_index_name)
         
-        if client:
-            print("Connected successfully!!!")
-        
         ''' total count '''
         cnt_list = (client.execute(query='SELECT COUNT(*) as cnt from {}'.format('public.student'),))
         
@@ -115,13 +112,13 @@ if __name__ == "__main__":
             We can make the same way using Dataframe after convert df to json
             '''
             es_client.buffered_json_to_es(df=pd.DataFrame.from_dict(rows), _index=es_index_name)
-            
-        ''' Check if indesing process works fine '''
-        es_client.post_search(_index=es_index_name)
                    
     except Exception as e:
         print("Connection - {}".format(str(e)))
         
     finally:
+        ''' Check if indesing process works fine '''
+        es_client.post_search(_index=es_index_name)
+        
         client.close()
         es_client.close()
