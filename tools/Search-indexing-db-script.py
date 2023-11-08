@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 import pandas as pd
+from threading import Thread
 from Search_Engine import Search
 
 load_dotenv()
@@ -48,26 +49,8 @@ class Databases(object):
         print("Closed successfully!!!") 
 
 
-        
-if __name__ == "__main__":
-    
-    ''' 
-        https://edudeveloper.tistory.com/131
-        Run (Postgresql DB Select and Indexing into Elasticsearch, Scripts)
-        poetry run python ./tools/Search-indexing-db-script.py --es=http://localhost:9209  --index=search_indexing-db 
-        poetry run python ./Search-indexing-db-script.py --es $ES_HOST --DATABASE_URL $DATABASE_URL --index $INDEX_NAME (Docker Based)
-    '''
-    parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
-    parser.add_argument('-e', '--es', dest='es', default="http://localhost:9209", help='host target')
-    parser.add_argument('-i', '--index', dest='index', default="search_indexing-db", help='host target')
-    args = parser.parse_args()
-    
-    if args.es:
-        es_host = args.es
-        
-    if args.index:
-        es_index_name = args.index
-        
+def work(es_host, es_index_name):
+    ''' Main Task '''
     es_client, client = None, None
     try:
         total_size = 0
@@ -122,3 +105,37 @@ if __name__ == "__main__":
         
         client.close()
         es_client.close()
+        
+        
+        
+if __name__ == "__main__":
+    
+    ''' 
+        https://edudeveloper.tistory.com/131
+        Run (Postgresql DB Select and Indexing into Elasticsearch, Scripts)
+        poetry run python ./tools/Search-indexing-db-script.py --es=http://localhost:9209  --index=search_indexing-db 
+        poetry run python ./Search-indexing-db-script.py --es $ES_HOST --DATABASE_URL $DATABASE_URL --index $INDEX_NAME (Docker Based)
+    '''
+    parser = argparse.ArgumentParser(description="Index into Elasticsearch using this script")
+    parser.add_argument('-e', '--es', dest='es', default="http://localhost:9209", help='host target')
+    parser.add_argument('-i', '--index', dest='index', default="search_indexing-db", help='host target')
+    args = parser.parse_args()
+    
+    if args.es:
+        es_host = args.es
+        
+    if args.index:
+        es_index_name = args.index
+        
+    # --
+    # Only One process we can use due to 'Global Interpreter Lock'
+    # 'Multiprocessing' is that we can use for running with multiple process
+    # --
+    try:
+        th1 = Thread(target=work, args=(es_host, es_index_name))
+        th1.start()
+        th1.join()
+        
+    except ThreadIssue:
+        pass
+    
