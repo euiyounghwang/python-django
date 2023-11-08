@@ -59,26 +59,23 @@ class Search():
             }
         }
         
-        def try_delete_index(index):
+        def try_delete_create_index(index):
             try:
                 if self.es_client.indices.exists(index):
                     print('Successfully deleted: {}'.format(index))
                     self.es_client.indices.delete(index)
+                    # now create a new index
+                    self.es_client.indices.create(index=_index, body=mapping)
+                    # es_client.indices.put_alias(index, "omnisearch_search")
+                    self.es_client.indices.refresh(index=_index)
+                    print("Successfully created: {}".format(_index))
+            
             except NotFoundError:
                 pass
-        
-        
-        try:
-            try_delete_index(index=_index)
-            # now create a new index
-            self.es_client.indices.create(index=_index, body=mapping)
-            # es_client.indices.put_alias(index, "omnisearch_search")
-            self.es_client.indices.refresh(index=_index)
-            print("Successfully created: {}".format(_index))
             
-        except Exception as error:
-            print('Error: {}, index: {}'.format(error, _index))
-
+        ''' delete and create index into ES '''
+        try_delete_create_index(index=_index)
+        
     
     def post_search(self, _index):
         ''' search after indexing as validate '''
