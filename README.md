@@ -125,8 +125,10 @@ Migrations for 'rest_api':
 ```
 - To use multiple databases you have to tell Django about the database server you will be using, but adding them in the settings.py.
 - The migrate management command operates on one database at a time. By default, it operates on the default database, but by providing the --database option, you can tell it to synchronize a different database.
+```bash
 $ ./manage.py migrate --database=users
 $ ./manage.py migrate --database=customers
+```
 - Turned out that migrate command accepts database CLI parameter, which by default is set to default , so it’s easy to run migrations on another database:
 ```bash
 # file: models.py
