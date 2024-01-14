@@ -155,9 +155,6 @@ python manage.py migrate --database=books
 user = User(....)
 user.save(using='users')
 Customer.objects.all().using('users')
-
-
-
 ```
 
 URL
