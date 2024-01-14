@@ -123,7 +123,34 @@ Migrations for 'rest_api':
     - Create model Student
     - Create model userRank
 ```
+- Turned out that migrate command accepts database CLI parameter, which by default is set to default , so it’s easy to run migrations on another database:
+```bash
+# file: models.py
 
+class Author(Model):
+    first_name = models.TextField()
+    last_name = models.TextField()
+
+class Book(Model):
+    content = models.TextField()
+
+
+
+# file: settings.py
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "books": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "books.sqlite3",
+    }
+}
+
+python manage.py migrate --database=books
+```
 
 URL
 ```http
