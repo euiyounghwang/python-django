@@ -123,7 +123,44 @@ Migrations for 'rest_api':
     - Create model Student
     - Create model userRank
 ```
+- To use multiple databases you have to tell Django about the database server you will be using, but adding them in the settings.py.
+- The migrate management command operates on one database at a time. By default, it operates on the default database, but by providing the --database option, you can tell it to synchronize a different database.
+```bash
+$ ./manage.py migrate --database=users
+$ ./manage.py migrate --database=customers
+```
+- Turned out that migrate command accepts database CLI parameter, which by default is set to default , so it’s easy to run migrations on another database:
+```bash
+# file: models.py
 
+class Author(Model):
+    first_name = models.TextField()
+    last_name = models.TextField()
+
+class Book(Model):
+    content = models.TextField()
+
+
+# file: settings.py
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "books": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "books.sqlite3",
+    }
+}
+
+python manage.py migrate --database=books
+```
+- You can manually select the database in your queries queries e.g or create dbrouters.py # [new file], we will be creating soon. <i>https://stackoverflow.com/questions/57676143/using-multiple-databases-with-django</i>
+```bash
+user = User(....)
+user.save(using='users')
+Customer.objects.all().using('users')
+```
 
 URL
 ```http
@@ -302,4 +339,22 @@ Experimental
 508 Loop Detected
 510 Not Extended
 511 Network Authentication Required
+```
+
+#### Example for Crontab
+- All Linux distributions are equipped with the cron utility, which allows users to schedule jobs to run at certain fixed times.
+- The system-wide root cron jobs are located in the /etc/crontab file. The file contents can be displayed using any text editor, or utilities like cat and more. sudo is not required to display the system cron jobs.
+```bash
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
 ```

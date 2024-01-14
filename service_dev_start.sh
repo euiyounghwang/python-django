@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Activate virtualenv && run serivce
 
@@ -8,6 +8,8 @@ SCRIPTDIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 cd $SCRIPTDIR
 source .venv/bin/activate
+
+./wait_for_es.sh http://localhost:9209
 
 # poetry run python manage.py migrate 
 # -- runserver is for dev env
