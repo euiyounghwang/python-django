@@ -123,6 +123,7 @@ Migrations for 'rest_api':
     - Create model Student
     - Create model userRank
 ```
+- To use multiple databases you have to tell Django about the database server you will be using, but adding them in the settings.py.
 - Turned out that migrate command accepts database CLI parameter, which by default is set to default , so it’s easy to run migrations on another database:
 ```bash
 # file: models.py
@@ -135,9 +136,7 @@ class Book(Model):
     content = models.TextField()
 
 
-
 # file: settings.py
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -150,6 +149,15 @@ DATABASES = {
 }
 
 python manage.py migrate --database=books
+```
+- You can manually select the database in your queries queries e.g or create dbrouters.py # [new file], we will be creating soon. <i>https://stackoverflow.com/questions/57676143/using-multiple-databases-with-django</i>
+```bash
+user = User(....)
+user.save(using='users')
+Customer.objects.all().using('users')
+
+
+
 ```
 
 URL
