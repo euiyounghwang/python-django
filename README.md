@@ -1,4 +1,5 @@
 ### Python-Search Project with Django
+<img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green"/>
 
 __Why Django REST Framework?__
 There are many frameworks for building REST APIs, but we’re gonna use the Django Rest Framework by the following reasons:
