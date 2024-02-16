@@ -65,10 +65,10 @@ class Search():
                     print('Successfully deleted: {}'.format(index))
                     self.es_client.indices.delete(index)
                     # now create a new index
-                    self.es_client.indices.create(index=_index, body=mapping)
+                    self.es_client.indices.create(index=index, body=mapping)
                     # es_client.indices.put_alias(index, "omnisearch_search")
-                    self.es_client.indices.refresh(index=_index)
-                    print("Successfully created: {}".format(_index))
+                    self.es_client.indices.refresh(index=index)
+                    print("Successfully created: {}".format(index))
             
             except NotFoundError:
                 pass
