@@ -1,4 +1,6 @@
 ### Python-Search Project with Django
+<i>
+<img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green"/>
 
 __Why Django REST Framework?__
 There are many frameworks for building REST APIs, but we’re gonna use the Django Rest Framework by the following reasons:
@@ -340,6 +342,7 @@ Experimental
 510 Not Extended
 511 Network Authentication Required
 ```
+
 
 #### Example for Crontab
 - All Linux distributions are equipped with the cron utility, which allows users to schedule jobs to run at certain fixed times.
