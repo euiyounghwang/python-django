@@ -89,7 +89,7 @@ services:
     restart: unless-stopped
     environment:
       - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
-      - ES_HOST=http://host.docker.internal:9209
+      - ES_HOST=http://host.docker.internal:9203
       - HOST=host.docker.internal
       - RABBIT_HOST=host.docker.internal
       - PUBLISH_QUEUE=fastapi_publish_queue
@@ -112,7 +112,7 @@ services:
       - ${PROJECTS_DIR}/python-django:/app/FN-Django-Services
     environment:
       - DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres
-      - ES_HOST=http://host.docker.internal:9209
+      - ES_HOST=http://host.docker.internal:9203
       - HOST=host.docker.internal
       - RABBIT_HOST=host.docker.internal
       - PUBLISH_QUEUE=fastapi_publish_queue

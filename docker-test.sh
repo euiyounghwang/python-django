@@ -11,7 +11,7 @@ docker run -i -t --name fn-django-search-api-test \
   --publish 9992:9999 --expose 9999 \
   --network bridge \
   -e DATABASE_URL=postgresql://postgres:1234@host.docker.internal:15432/postgres \
-  -e ES_HOST=http://host.docker.internal:9209 \
+  -e ES_HOST=http://host.docker.internal:9203 \
   -e HOST=host.docker.internal \
   -e RABBIT_HOST=host.docker.internal \
   -e PUBLISH_QUEUE=fastapi_publish_queue \
